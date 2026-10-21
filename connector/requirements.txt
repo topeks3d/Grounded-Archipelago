@@ -1,9 +1,0 @@
-# The connector itself has no extra dependencies beyond what a normal
-# Archipelago install already provides (CommonClient.py needs colorama,
-# websockets, and optionally kivy/kivymd for --gui, all of which come from
-# Archipelago's own requirements.txt). This file exists mainly as a place
-# to note that, and to pin things if you end up running the connector
-# somewhere that *doesn't* already have a full Archipelago install's deps
-# (e.g. a stripped-down venv you built by hand).
-colorama>=0.4.6
-websockets>=13.1,<14
