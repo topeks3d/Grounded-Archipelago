@@ -2,10 +2,10 @@
 
 ## Required software
 
-- [Grounded](https://store.steampowered.com/app/962130/Grounded/) (Steam, PC)
+- [Grounded](https://store.steampowered.com/app/962130/Grounded/) -- only the
+  Steam version is supported
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.7 or later
-- [UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/198) (0R4X's
-  Grounded-ready UE4SS package; recommended -- this mod was built on it)
+- [CluelessOtter's UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/201)
 - This project's release zip: `grounded.apworld`, the `GroundedArchipelago`
   mod folder and (optionally) `grounded_poptracker.zip`
 
@@ -17,17 +17,14 @@ for the Windows installer). Restart the Archipelago Launcher afterwards.
 
 ## 2. Install the game mod
 
-1. Install [UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/198):
-   extract it into `Grounded\Maine\Binaries\Win64`, so `dwmapi.dll` and the
-   `ue4ss` folder sit next to `Maine-Win64-Shipping.exe`.
+1. Install UE4SS by following
+   [CluelessOtter's guide](https://www.nexusmods.com/grounded/mods/201) --
+   please read their guide carefully.
 2. Copy the `GroundedArchipelago` folder into `ue4ss\Mods`, so you have
    `...\Win64\ue4ss\Mods\GroundedArchipelago\Scripts\main.lua`.
 3. In `ue4ss\Mods\mods.txt`, add the line `GroundedArchipelago : 1` and make
    sure `CheatManagerEnablerMod : 1` is there -- received items are granted
-   through the game's own cheat commands, which need it. Leave
-   **ConsoleEnablerMod** and **BPModLoaderMod** off (`: 0`, as the package
-   ships them): they can crash Grounded on startup, and this mod doesn't need
-   them.
+   through the game's own cheat commands, which need it.
 4. Start Grounded once. The UE4SS log (`ue4ss\UE4SS.log`) should show lines
    starting with `[GroundedArchipelago]`, including the IPC folder it uses.
 
