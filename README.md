@@ -25,7 +25,7 @@ Entertainment, Xbox Game Studios, Microsoft or the Archipelago project.
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.7 or later
 - [CluelessOtter's UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/201)
 - WinRAR to extract files
-- The latest `GroundedArchipelagozip` from
+- The latest `GroundedArchipelago.zip` from
   [Releases](https://github.com/topeks3d/Grounded-Archipelago/releases). It
   contains the apworld, the mod files and an optional poptracker.
 
