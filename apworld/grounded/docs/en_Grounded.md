@@ -43,9 +43,11 @@ Depending on the "Goal" option:
   boxes, ...) -- on by default.
 - **Items:** every Tier 1-3 weapon, tool and armor recipe as its own item
   (or, with **Progressive Gear**, Progressive Axe/Hammer/Shovel/Spear/Bow and
-  Progressive Head/Chest/Leg Armor), Consumables/Utilities recipe groups, the
-  Smoothie Station, Cookery and Oven, traversal gear (Gas Mask, Diving Gear,
-  Zip Line Rig).
+  Progressive Head/Chest/Leg Armor), every consumable recipe (meals,
+  smoothies, canteens, Bandage, ...) as its own item, the Utilities recipe
+  group, the Smoothie Station, Cookery and Oven, traversal gear (Gas Mask,
+  Diving Gear, Zip Line Rig). The Tier 1 recipes and the Bandage are always
+  found early.
 - **Filler:** Raw Science (2500 per bundle), Full Restore (health, food, water
   and stamina to full) and Bandage Bundles. Also 4 DeDuper Jelly Bundles
   (needed in logic for the New Game+ weapons) and 2 Infused Ooze Bundles.

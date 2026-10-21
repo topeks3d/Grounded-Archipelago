@@ -28,7 +28,7 @@
         "name": "Cook: Funguspacho",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2|gas|cookery"
+          "$req|has:funguspacho|c2|gas|cookery"
         ]
       }
     ],
@@ -509,7 +509,7 @@
         "name": "Craft: Bandage",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables"
+          "$req|has:bandage"
         ]
       },
       {
@@ -1485,35 +1485,35 @@
         "name": "Cook: Gnatchos",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1|cookery"
+          "$req|has:gnatchos|c1|cookery"
         ]
       },
       {
         "name": "Cook: Larvagna",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1|cookery"
+          "$req|has:larvagna|c1|cookery"
         ]
       },
       {
         "name": "Cook: Mac N Bees",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1|cookery"
+          "$req|has:mac_n_bees|c1|cookery"
         ]
       },
       {
         "name": "Cook: Miteloaf",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1|cookery"
+          "$req|has:miteloaf|c1|cookery"
         ]
       },
       {
         "name": "Cook: Spaghetflea",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1|cookery"
+          "$req|has:spaghetflea|c1|cookery"
         ]
       },
       {
@@ -1618,7 +1618,7 @@
         "name": "Craft: Canteen",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c1"
+          "$req|has:canteen|c1"
         ]
       },
       {
@@ -2428,28 +2428,28 @@
         "name": "Cook: Boatman Fin Soup",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2|cookery"
+          "$req|has:boatman_fin_soup|c2|cookery"
         ]
       },
       {
         "name": "Cook: Omelant",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2|cookery"
+          "$req|has:omelant|c2|cookery"
         ]
       },
       {
         "name": "Cook: Spider Slider",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2|cookery"
+          "$req|has:spider_slider|c2|cookery"
         ]
       },
       {
         "name": "Cook: Tadpoloca Pudding",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2|cookery"
+          "$req|has:tadpole_pudding|c2|cookery"
         ]
       },
       {
@@ -2533,7 +2533,7 @@
         "name": "Craft: Charcoal Canteen",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|hammer2"
+          "$req|has:charcoal_canteen|hammer2"
         ]
       },
       {
@@ -2575,7 +2575,7 @@
         "name": "Craft: Healbasa",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c2"
+          "$req|has:healing_bomb|c2"
         ]
       },
       {
@@ -3430,35 +3430,35 @@
         "name": "Cook: Black Ox Burger",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c3|cookery"
+          "$req|has:black_ox_burger|c3|cookery"
         ]
       },
       {
         "name": "Cook: Empanadust",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c3|cookery"
+          "$req|has:empanadust|c3|cookery"
         ]
       },
       {
         "name": "Cook: Quesadillantlion",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c3|cookery"
+          "$req|has:quesadillantlion|c3|cookery"
         ]
       },
       {
         "name": "Cook: Termite Delight",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c3|cookery"
+          "$req|has:termite_delight|c3|cookery"
         ]
       },
       {
         "name": "Cook: Wasperole",
         "item_count": 1,
         "access_rules": [
-          "$req|has:consumables|c3|cookery"
+          "$req|has:wasperole|c3|cookery"
         ]
       },
       {

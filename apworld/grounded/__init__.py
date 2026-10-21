@@ -20,6 +20,7 @@ from .items import (
 from .location_renames import ap_name
 from .review_data import DISABLED_LOCATIONS
 from .locations import itemsanity_location_names, killsanity_location_names, location_name_groups, location_name_to_id
+from .consumables import EARLY_CONSUMABLES
 from .craftsanity import craftsanity_location_names
 from .gear import GEAR, PROGRESSIVE_GEAR, PROGRESSIVE_LINES
 from .goldcards import GOLD_CARD_PROGRESS_ITEM, gold_card_location_names
@@ -124,6 +125,9 @@ class GroundedWorld(World):
                 early[prog] = early.get(prog, 0) + 1
             else:
                 early[gear.name] = 1
+        # Bandages too: healing from the start, alongside the Pebblet tools.
+        for name in EARLY_CONSUMABLES:
+            early[name] = 1
 
     def _apply_slot_data(self, slot_data: Dict[str, Any]) -> None:
         options = self.options

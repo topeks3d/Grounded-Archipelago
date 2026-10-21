@@ -36,12 +36,6 @@
     "codes": "oven"
   },
   {
-    "name": "Consumables",
-    "type": "toggle",
-    "img": "images/items/consumables.png",
-    "codes": "consumables"
-  },
-  {
     "name": "Utilities",
     "type": "toggle",
     "img": "images/items/utilities.png",
@@ -700,6 +694,204 @@
     "type": "toggle",
     "img": "images/items/aphid_slippers.png",
     "codes": "aphid_slippers"
+  },
+  {
+    "name": "Canteen",
+    "type": "toggle",
+    "img": "images/items/canteen.png",
+    "codes": "canteen"
+  },
+  {
+    "name": "Upgraded Canteen",
+    "type": "toggle",
+    "img": "images/items/upgraded_canteen.png",
+    "codes": "upgraded_canteen"
+  },
+  {
+    "name": "Charcoal Canteen",
+    "type": "toggle",
+    "img": "images/items/charcoal_canteen.png",
+    "codes": "charcoal_canteen"
+  },
+  {
+    "name": "Acorn Granola",
+    "type": "toggle",
+    "img": "images/items/acorn_granola.png",
+    "codes": "acorn_granola"
+  },
+  {
+    "name": "Bandage",
+    "type": "toggle",
+    "img": "images/items/bandage.png",
+    "codes": "bandage"
+  },
+  {
+    "name": "Boatman Fin Soup",
+    "type": "toggle",
+    "img": "images/items/boatman_fin_soup.png",
+    "codes": "boatman_fin_soup"
+  },
+  {
+    "name": "Fiber Smoothie",
+    "type": "toggle",
+    "img": "images/items/fiber_smoothie.png",
+    "codes": "fiber_smoothie"
+  },
+  {
+    "name": "Gastro Goo Smoothie",
+    "type": "toggle",
+    "img": "images/items/gastro_goo_smoothie.png",
+    "codes": "gastro_goo_smoothie"
+  },
+  {
+    "name": "Fuzz On The Rocks Smoothie",
+    "type": "toggle",
+    "img": "images/items/fuzz_on_the_rocks_smoothie.png",
+    "codes": "fuzz_on_the_rocks_smoothie"
+  },
+  {
+    "name": "Aphid Smoothie",
+    "type": "toggle",
+    "img": "images/items/aphid_smoothie.png",
+    "codes": "aphid_smoothie"
+  },
+  {
+    "name": "Berry Smoothie",
+    "type": "toggle",
+    "img": "images/items/berry_smoothie.png",
+    "codes": "berry_smoothie"
+  },
+  {
+    "name": "Water Breathing Smoothie",
+    "type": "toggle",
+    "img": "images/items/water_breathing_smoothie.png",
+    "codes": "water_breathing_smoothie"
+  },
+  {
+    "name": "Swim Speed Smoothie",
+    "type": "toggle",
+    "img": "images/items/swim_speed_smoothie.png",
+    "codes": "swim_speed_smoothie"
+  },
+  {
+    "name": "Attack Smoothie",
+    "type": "toggle",
+    "img": "images/items/attack_smoothie.png",
+    "codes": "attack_smoothie"
+  },
+  {
+    "name": "Ant Smoothie",
+    "type": "toggle",
+    "img": "images/items/ant_smoothie.png",
+    "codes": "ant_smoothie"
+  },
+  {
+    "name": "Human Food Smoothie",
+    "type": "toggle",
+    "img": "images/items/human_food_smoothie.png",
+    "codes": "human_food_smoothie"
+  },
+  {
+    "name": "Wasp Smoothie",
+    "type": "toggle",
+    "img": "images/items/wasp_smoothie.png",
+    "codes": "wasp_smoothie"
+  },
+  {
+    "name": "Boss Smoothie",
+    "type": "toggle",
+    "img": "images/items/boss_smoothie.png",
+    "codes": "boss_smoothie"
+  },
+  {
+    "name": "Healing Bomb",
+    "type": "toggle",
+    "img": "images/items/healing_bomb.png",
+    "codes": "healing_bomb"
+  },
+  {
+    "name": "Spaghetflea",
+    "type": "toggle",
+    "img": "images/items/spaghetflea.png",
+    "codes": "spaghetflea"
+  },
+  {
+    "name": "Spider Slider",
+    "type": "toggle",
+    "img": "images/items/spider_slider.png",
+    "codes": "spider_slider"
+  },
+  {
+    "name": "Larvagna",
+    "type": "toggle",
+    "img": "images/items/larvagna.png",
+    "codes": "larvagna"
+  },
+  {
+    "name": "Miteloaf",
+    "type": "toggle",
+    "img": "images/items/miteloaf.png",
+    "codes": "miteloaf"
+  },
+  {
+    "name": "Mac N Bees",
+    "type": "toggle",
+    "img": "images/items/mac_n_bees.png",
+    "codes": "mac_n_bees"
+  },
+  {
+    "name": "Gnatchos",
+    "type": "toggle",
+    "img": "images/items/gnatchos.png",
+    "codes": "gnatchos"
+  },
+  {
+    "name": "Funguspacho",
+    "type": "toggle",
+    "img": "images/items/funguspacho.png",
+    "codes": "funguspacho"
+  },
+  {
+    "name": "Omelant",
+    "type": "toggle",
+    "img": "images/items/omelant.png",
+    "codes": "omelant"
+  },
+  {
+    "name": "Quesadillantlion",
+    "type": "toggle",
+    "img": "images/items/quesadillantlion.png",
+    "codes": "quesadillantlion"
+  },
+  {
+    "name": "Black Ox Burger",
+    "type": "toggle",
+    "img": "images/items/black_ox_burger.png",
+    "codes": "black_ox_burger"
+  },
+  {
+    "name": "Termite Delight",
+    "type": "toggle",
+    "img": "images/items/termite_delight.png",
+    "codes": "termite_delight"
+  },
+  {
+    "name": "Tadpole Pudding",
+    "type": "toggle",
+    "img": "images/items/tadpole_pudding.png",
+    "codes": "tadpole_pudding"
+  },
+  {
+    "name": "Wasperole",
+    "type": "toggle",
+    "img": "images/items/wasperole.png",
+    "codes": "wasperole"
+  },
+  {
+    "name": "Empanadust",
+    "type": "toggle",
+    "img": "images/items/empanadust.png",
+    "codes": "empanadust"
   },
   {
     "name": "Progressive Axe",

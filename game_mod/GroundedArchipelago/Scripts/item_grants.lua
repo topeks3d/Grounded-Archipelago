@@ -237,7 +237,8 @@ end
 
 -- Grouped recipe items -> their CraftingRecipeTable rows (UnlockRecipe).
 local TIER_NAME_TO_RECIPE_ROWS = {
-    -- Consumables: food, drink and healing.
+    -- Consumables: food, drink and healing. Only rooms generated before
+    -- v0.1.1 send this; newer ones send each recipe (CONSUMABLES below).
     ["Consumables"] = {
         "Canteen", "Canteen+", "CanteenCharcoal", "AcornGranola",
         "Bandage", "BandageEfficient", "BoatmanFinSoup",
@@ -541,6 +542,13 @@ for item_name, _ in pairs(GEAR_ITEM_TO_RECIPE_ROW) do
     grant_table[item_name] = function() return unlock_single_recipe(item_name) end
 end
 
+-- Every individual consumable recipe item (consumables.py, via ap_data.lua).
+local CONSUMABLES = require("ap_data").CONSUMABLES
+
+for item_name, consumable in pairs(CONSUMABLES) do
+    grant_table[item_name] = function() return unlock_recipe_rows(consumable.recipes) end
+end
+
 -- ProgressiveGear: the Nth copy unlocks the first N recipes of its line
 -- (UnlockRecipe is idempotent; lines come from ap_data.lua).
 local PROGRESSIVE_LINES = require("ap_data").PROGRESSIVE_LINES
@@ -619,6 +627,11 @@ function M.get_managed_recipe_rows()
             rows[row] = true
         end
     end
+    for _, consumable in pairs(CONSUMABLES) do
+        for _, row in ipairs(consumable.recipes) do
+            rows[row] = true
+        end
+    end
     return rows
 end
 
@@ -635,7 +648,7 @@ function M.get_managed_building_rows()
 end
 
 -- Item row whose icon the in-game popup can show for a received AP item
--- (gear recipes, progressive gear, resource bundles), or nil. Recipe rows
+-- (gear recipes, progressive gear, consumables, resource bundles), or nil. Recipe rows
 -- double as item rows for nearly all gear.
 function M.icon_row(item_name, copy)
     local line = PROGRESSIVE_LINES[item_name]
@@ -644,6 +657,9 @@ function M.icon_row(item_name, copy)
     end
     if GEAR_ITEM_TO_RECIPE_ROW[item_name] then
         return GEAR_ITEM_TO_RECIPE_ROW[item_name]
+    end
+    if CONSUMABLES[item_name] then
+        return CONSUMABLES[item_name].item_row
     end
     local bundle = RESOURCE_BUNDLES[item_name]
     return bundle and bundle[1] or nil

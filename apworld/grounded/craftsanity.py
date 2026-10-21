@@ -11,6 +11,7 @@ from __future__ import annotations
 
 from typing import Dict, List
 
+from .consumables import CONSUMABLES
 from .gear import GEAR
 
 
@@ -19,7 +20,7 @@ CRAFTSANITY_ROW_TO_DISPLAY_NAME: Dict[str, str] = {
     g.item_row: g.name for g in GEAR if g.item_row not in _LATE_GEAR_ROWS
 }
 CRAFTSANITY_ROW_TO_DISPLAY_NAME.update({
-    # Consumables (36) -- gated on the "Consumables" grouped item.
+    # Consumables (33) -- each gated on its own item (consumables.py).
     "Canteen": "Canteen",
     "Canteen+": "Upgraded Canteen",
     "CanteenCharcoal": "Charcoal Canteen",
@@ -76,23 +77,14 @@ CRAFTSANITY_ROW_TO_DISPLAY_NAME["Flippers"] = "Fin Flops"
 
 # row -> the AP item that unlocks the recipe (gear gates on itself).
 CRAFTSANITY_ROW_TO_GATE_ITEM: Dict[str, str] = {g.item_row: g.name for g in GEAR}
-CONSUMABLES_ROWS = (
-    "Canteen", "Canteen+", "CanteenCharcoal", "GranolaAcorn", "Bandage",
-    "MealTier1BoatmanSoap", "SmoothieFiber", "SmoothieGastroGoo",
-    "SmoothieFuzzOnTheRocks", "SmoothieAphid", "SmoothieBerry", "SmoothieWaterBreathing",
-    "SmoothieSwimSpeed", "SmoothieAttack", "SmoothieAnt", "SmoothieHumanFood",
-    "SmoothieWasp", "SmoothieBoss", "BombHeal",
-    "MealTier1Spaghetflea", "MealTier2SpiderSlider", "MealTier1Larvagna", "MealTier1Miteloaf",
-    "MealTier2MacNBees", "MealTier1Gnatchos", "MealTier2Funguspacho", "MealTier2Omelant", "MealTier3Quesadillantlion",
-    "MealTier3BlackOxBurger", "MealTier3TermiteDelight", "MealTier3TadpolePudding", "MealTier3Wasperole", "MealTier3Empanadust",
-)
+CONSUMABLES_ROWS = tuple(c.item_row for c in CONSUMABLES)
 _UTILITIES_ROWS = (
     "Torch", "Torch+", "Flare", "SmokeScreen", "Binoculars", "LeafBlower",
     "RepairHammer", "RepairArmor1", "RepairArmor2", "DecoyBait",
     "DivingLantern", "DivingLantern+", "LanternFirefly",
 )
-for _row in CONSUMABLES_ROWS:
-    CRAFTSANITY_ROW_TO_GATE_ITEM[_row] = "Consumables"
+for _consumable in CONSUMABLES:
+    CRAFTSANITY_ROW_TO_GATE_ITEM[_consumable.item_row] = _consumable.name
 for _row in _UTILITIES_ROWS:
     CRAFTSANITY_ROW_TO_GATE_ITEM[_row] = "Utilities"
 CRAFTSANITY_ROW_TO_GATE_ITEM["Flippers"] = "Diving Gear"

@@ -39,7 +39,7 @@ class TestGroundedLogic(WorldTestBase):
 
     def test_meals_need_cookery(self):
         self.assertIn("Cookery", {i.name for i in self.multiworld.itempool})
-        self.collect_by_name(["Pebblet Spear", "Consumables"])
+        self.collect_by_name(["Pebblet Spear", "Spaghetflea"])
         self.assertFalse(self.can_reach_location(ap_name("Craft: Spaghetflea")))
         self.collect_by_name(["Cookery"])
         self.assertTrue(self.can_reach_location(ap_name("Craft: Spaghetflea")))
@@ -239,6 +239,30 @@ class TestGroundedLogic(WorldTestBase):
         pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
         for gear in GEAR:
             self.assertEqual(pool.count(gear.name), 1, gear.name)
+
+    def test_consumables_unlock_one_by_one(self):
+        from worlds.grounded.consumables import CONSUMABLES
+        from worlds.grounded.craftsanity import CRAFTSANITY_ROW_TO_DISPLAY_NAME
+        from worlds.grounded.items import item_table
+        self.assertNotIn("Consumables", item_table)
+        pool = [item.name for item in self.multiworld.itempool if item.player == self.player]
+        for consumable in CONSUMABLES:
+            self.assertEqual(pool.count(consumable.name), 1, consumable.name)
+            self.assertEqual(CRAFTSANITY_ROW_TO_DISPLAY_NAME[consumable.item_row], consumable.name)
+        # Each recipe opens only its own craft check.
+        self.assertFalse(self._reachable("Craft: Bandage"))
+        self.collect_by_name(["Bandage"])
+        self.assertTrue(self._reachable("Craft: Bandage"))
+        self.assertFalse(self._reachable("Craft: Torch"))
+        self.collect_by_name(["Pebblet Spear"])
+        self.assertFalse(self._reachable("Craft: Canteen"))
+        self.collect_by_name(["Canteen"])
+        self.assertTrue(self._reachable("Craft: Canteen"))
+
+    def test_bandage_is_early(self):
+        early = self.multiworld.early_items[self.player]
+        for name in ("Bandage", "Pebblet Axe", "Pebblet Hammer"):
+            self.assertEqual(early.get(name), 1, name)
 
 
 class TestGroundedRecipeShuffle(WorldTestBase):

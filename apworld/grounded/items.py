@@ -2,7 +2,7 @@
 Item definitions for the Grounded world.
 
 Item IDs are BASE_ID + code_offset. Retired offsets, never reuse: 2, 4, 5,
-10-20, 30.
+10-20, 24 (the old grouped "Consumables" item), 30.
 """
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ from typing import Dict, NamedTuple, Set
 
 from BaseClasses import ItemClassification as IC
 
+from .consumables import CONSUMABLES
 from .gear import GEAR, PROGRESSIVE_LINES
 
 BASE_ID = 9411000
@@ -46,13 +47,17 @@ blueprint_items: Dict[str, ItemData] = {
     "Cookery":               ItemData(26, IC.progression, ItemType.blueprint),
     # Oven = row "Smelter" (globs, jewels, Ash Cement, Mushroom Brick, boss keys).
     "Oven":                  ItemData(27, IC.progression, ItemType.blueprint),
-    "Consumables":           ItemData(24, IC.progression, ItemType.blueprint),
     "Utilities":             ItemData(25, IC.progression, ItemType.blueprint),
 }
 
 # One item per gear recipe (gear.py).
 gear_recipe_items: Dict[str, ItemData] = {
     g.name: ItemData(g.code_offset, IC.progression, ItemType.blueprint) for g in GEAR
+}
+
+# One item per consumable recipe (consumables.py).
+consumable_items: Dict[str, ItemData] = {
+    c.name: ItemData(c.code_offset, IC.progression, ItemType.blueprint) for c in CONSUMABLES
 }
 
 # ProgressiveGear: count=0 here; create_items adds them (and drops the
@@ -108,6 +113,7 @@ item_table: Dict[str, ItemData] = {
     **gear_items,
     **blueprint_items,
     **gear_recipe_items,
+    **consumable_items,
     **progressive_items,
     **story_items,
     **filler_items,
@@ -120,7 +126,8 @@ item_name_to_id: Dict[str, int] = {
 
 item_name_groups: Dict[str, Set[str]] = {
     "Gear": set(gear_items.keys()),
-    "Blueprints": set(blueprint_items.keys()) | set(gear_recipe_items.keys()),
+    "Blueprints": set(blueprint_items.keys()) | set(gear_recipe_items.keys()) | set(consumable_items.keys()),
+    "Consumables": set(consumable_items.keys()),
     "Tier 1 Gear": {g.name for g in GEAR if g.tier == 1},
     "Tier 2 Gear": {g.name for g in GEAR if g.tier == 2},
     "Tier 3 Gear": {g.name for g in GEAR if g.tier == 3},
