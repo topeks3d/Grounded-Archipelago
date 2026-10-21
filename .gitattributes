@@ -1,2 +1,12 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Development files: kept in the repo, left out of release "Source code" downloads
+apworld/grounded/test/          export-ignore
+connector/                      export-ignore
+location_review.txt             export-ignore
+DEV_NOTES.md                    export-ignore
+TESTING.md                      export-ignore
+ARCHITECTURE.md                 export-ignore
+.gitignore                      export-ignore
+.gitattributes                  export-ignore
