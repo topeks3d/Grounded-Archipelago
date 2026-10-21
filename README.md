@@ -23,7 +23,8 @@ Entertainment, Xbox Game Studios, Microsoft or the Archipelago project.
 
 - Grounded **ONLY STEAM VERSION IS SUPPORTED** ([Steam page](https://store.steampowered.com/app/962130/Grounded/))
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.7 or later
-- [0R4X's UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/198)
+- [CluelessOtter's UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/201)
+- WinRAR to extract files
 - The latest `GroundedArchipelagozip` from
   [Releases](https://github.com/topeks3d/Grounded-Archipelago/releases). It
   contains the apworld, the mod files and an optional poptracker.
@@ -34,17 +35,18 @@ Double click the apworld or drag it into your archipelago custom worlds folder.
 
 ### 2. Setting up the mod
 
-1. Install UE4SS according to [OR4X's guide](https://www.nexusmods.com/grounded/mods/198).
+1. Install UE4SS according to [CluelessOtter's guide](https://www.nexusmods.com/grounded/mods/201).
+   - **`PLEASE MAKE SURE YOU READ THEIR GUIDE FOR INSTALLING UE4SS `**
 
-2. Copy the `GroundedArchipelago` folder into the mods folder inside ue4ss.
-3. Open `ue4ss\Mods\mods.txt` and make sure that these mods are enabled:
+3. Copy the `GroundedArchipelago` folder into the mods folder inside ue4ss.
+4. Open `ue4ss\Mods\mods.txt` and make sure that these mods are enabled:
 
    ```
    CheatManagerEnablerMod : 1
    GroundedArchipelago : 1
    ```
 
-4. Start Grounded once. `ue4ss\UE4SS.log` should now have lines starting with
+5. Start Grounded once. `ue4ss\UE4SS.log` should now have lines starting with
    `[GroundedArchipelago]`, including the IPC folder the mod uses.
 
 ### 3. Generate and host a game
@@ -107,7 +109,7 @@ Please remember to only play on fresh saves if you are starting a new multiworld
 - [RE-UE4SS](https://github.com/UE4SS-RE/RE-UE4SS): the Unreal Engine
   scripting system the in-game mod runs on, including its built-in
   CheatManagerEnablerMod.
-- [UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/198) by 0R4X
+- [UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/201) by CluelessOtter
   (Nexus Mods): the Grounded-ready UE4SS package (UE4SS 3.0.1 with
   Grounded-specific fixes) this mod was developed and tested on.
 - [Kivy](https://kivy.org) and [KivyMD](https://github.com/kivymd/KivyMD),
