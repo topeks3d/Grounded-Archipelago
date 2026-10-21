@@ -1,0 +1,4 @@
+This file's mere presence tells some UE4SS versions to load this mod.
+Newer UE4SS versions instead use a line in Mods/mods.txt -- see the setup
+guide (apworld/grounded/docs/setup_en.md) for the exact step for your
+version.

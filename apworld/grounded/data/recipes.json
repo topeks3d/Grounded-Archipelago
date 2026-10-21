@@ -1,0 +1,4169 @@
+{
+ "names": {
+  "Acid Gland": "Acid Gland",
+  "Acorn Bits": "Acorn Bits",
+  "Acorn Chest Armor": "Acorn Chestplate",
+  "Acorn Granola": "Acorn Granola",
+  "Acorn Head Armor": "Acorn Face Mask",
+  "Acorn Leg Armor": "Acorn Leg Plates",
+  "Acorn Shell": "Acorn Shell",
+  "Acorn Shovel": "Acorn Shovel",
+  "Acorn Top": "Acorn Top",
+  "Advanced Armor Repair Kit": "Super Armor Glue",
+  "Algae": "Algae",
+  "Ant Queen Scepter": "Ant Queen Scepter",
+  "Ant Smoothie": "Worker's Comp",
+  "Antlion Chest Armor": "Antlion Poncho",
+  "Antlion Head Armor": "Antlion Wide Brim",
+  "Antlion Leg Armor": "Antlion Spurs",
+  "Antlion Part": "Antlion Part",
+  "Antlion Pincer": "Antlion Pincer",
+  "Aphid Honeydew": "Aphid Honeydew",
+  "Aphid Jerky": "Aphid Jerky",
+  "Aphid Roast": "Aphid Roast",
+  "Aphid Slippers": "Aphid Slippers",
+  "Aphid Smoothie": "Boost Juice",
+  "Apple Bits": "Apple Bits",
+  "Armor Repair Kit": "Armor Glue",
+  "Ash Cement": "Ash Cement",
+  "Attack Smoothie": "Liquid Rage",
+  "Bandage": "Fiber Bandage",
+  "Bee Chest Armor": "Bee Shoulder Pads",
+  "Bee Fuzz": "Bee Fuzz",
+  "Bee Head Armor": "Bee Face Mask",
+  "Bee Leg Armor": "Bee Shin Guards",
+  "Bee Stinger": "Bee Stinger",
+  "Berry Chunk": "Berry Chunk",
+  "Berry Leather": "Berry Leather",
+  "Berry Smoothie": "Hedge Lord",
+  "Billy Hog Bite": "Billy Hog Bite",
+  "Binoculars": "Binoculars",
+  "Black Ant Chest Armor": "Black Ant Chestplate",
+  "Black Ant Egg": "Black Ant Egg",
+  "Black Ant Head": "Black Ant Head",
+  "Black Ant Head Armor": "Black Ant Helmet",
+  "Black Ant Leg Armor": "Black Ant Legplates",
+  "Black Ant Mandibles": "Black Ant Mandibles",
+  "Black Ant Part": "Black Ant Part",
+  "Black Ant Shield": "Black Ant Shield",
+  "Black Ant Shovel": "Black Ant Shovel",
+  "Black Ant Sword": "Black Ant Sword",
+  "Black Ox Burger": "Black Ox Burger",
+  "Black Ox Chest Armor": "Black Ox Harness",
+  "Black Ox Crossbow": "Black Ox Crossbow",
+  "Black Ox Hammer": "Black Ox Hammer",
+  "Black Ox Head Armor": "Black Ox Helm",
+  "Black Ox Horn": "Black Ox Horn",
+  "Black Ox Leg Armor": "Black Ox Legwraps",
+  "Black Ox Part": "Black Ox Part",
+  "Boatman Fin Soup": "Boatman Fin Soup",
+  "Boiling Gland": "Boiling Gland",
+  "Bombardier Part": "Bombardier Part",
+  "Bone Dagger": "Bone Dagger",
+  "Bone Trident": "Bone Trident",
+  "Boss Smoothie": "Boss Smoothie",
+  "Brittle Marble Shard": "Brittle Marble Shard",
+  "Brittle Plating": "Brittle Plating",
+  "Brittle Quartzite Shard": "Brittle Quartzite Shard",
+  "Brittle Whetstone": "Brittle Whetstone",
+  "Bug Rubber": "Bug Rubber",
+  "Canteen": "Canteen",
+  "Charcoal Ash": "Charcoal Ash",
+  "Charcoal Canteen": "Charcoal Canteen",
+  "Clay": "Clay",
+  "Clover Chest Armor": "Clover Poncho",
+  "Clover Head Armor": "Clover Hood",
+  "Clover Leaf": "Clover Leaf",
+  "Clover Leg Armor": "Clover Shin Guards",
+  "Cooked Tadpole Meat": "Cooked Tadpole Meat",
+  "Cookie Sandwich Bits": "Cookie Sandwich Bits",
+  "Crow Crossbow": "Crow Crossbow",
+  "Crow Feather Piece": "Crow Feather Piece",
+  "Crude Rope": "Crude Rope",
+  "Decoy Bait": "Decoy Bait",
+  "Dew Drop": "Dew Drop",
+  "Diving Bell Spider Chunk": "Diving Bell Spider Chunk",
+  "Diving Lantern": "Diving Lantern",
+  "Donut Chunk": "Donut Chunk",
+  "Dry Grass Chunk": "Dry Grass Chunk",
+  "Dust Mite Fuzz": "Dust Mite Fuzz",
+  "Eelgrass Strand": "Eelgrass Strand",
+  "Empanadust": "Empanadust",
+  "EverChar Coal Chunk": "EverChar Coal Chunk",
+  "Everchar Torch": "EverChar Torch",
+  "Eyepatch": "Eyepatch",
+  "Feather Arrow": "Feather Arrow",
+  "Fiber Smoothie": "Green Machine",
+  "Fin Flops": "Fin Flops",
+  "Fire Ant Chest Armor": "Fire Ant Chestplate",
+  "Fire Ant Egg": "Fire Ant Egg",
+  "Fire Ant Head": "Fire Ant Head",
+  "Fire Ant Head Armor": "Fire Ant Helmet",
+  "Fire Ant Leg Armor": "Fire Ant Legplates",
+  "Fire Ant Mandibles": "Fire Ant Mandibles",
+  "Fire Ant Part": "Fire Ant Part",
+  "Firefly Head Lamp": "Firefly Head Lamp",
+  "Firefly Lantern": "Firefly Lantern",
+  "Flare": "Flare",
+  "Flower Petal": "Flower Petal",
+  "Fungal Growth": "Fungal Growth",
+  "Funguspacho": "Funguspacho",
+  "Fuzz On The Rocks Smoothie": "Fuzz on the Rocks",
+  "Gastro Goo Smoothie": "Gastro Goo",
+  "Glow Goo": "Glow Goo",
+  "Gnat Fuzz": "Gnat Fuzz",
+  "Gnat Jerky": "Gnat Jerky",
+  "Gnat Roast": "Gnat Roast",
+  "Gnatchos": "Gnatchos",
+  "Grass Plank": "Grass Plank",
+  "Grass Seeds": "Grass Seeds",
+  "Green Shield Bug Parts": "Green Shield Bug Parts",
+  "Grub Chest Armor": "Grub Vest",
+  "Grub Head Armor": "Grub Goggles",
+  "Grub Hide": "Grub Hide",
+  "Grub Jerky": "Grub Jerky",
+  "Grub Leg Armor": "Grub Leggings",
+  "Grub Roast": "Grub Roast",
+  "Grub Sludge": "Grub Sludge",
+  "Grumble's Granola Bar": "Grumble's Granola Bar",
+  "Gum Nugget": "Gum Nugget",
+  "Gunpowder Clump": "Gunpowder Clump",
+  "Healing Bomb": "Healbasa",
+  "Human Food Smoothie": "Human Food",
+  "Insect Axe": "Insect Axe",
+  "Insect Bow": "Insect Bow",
+  "Insect Hammer": "Insect Hammer",
+  "Iridescent Scale": "Iridescent Scale",
+  "Juice Drop": "Juice Drop",
+  "Koi Chest Armor": "Koi Scale Chestplate",
+  "Koi Fish Scale": "Koi Fish Scale",
+  "Koi Head Armor": "Koi Scale Helmet",
+  "Koi Leg Armor": "Koi Scale Greaves",
+  "Ladybird Shell": "Ladybird Shell",
+  "Ladybird Shield": "Ladybird Shield",
+  "Ladybug Chest Armor": "Ladybug Chestplate",
+  "Ladybug Head": "Ladybug Head",
+  "Ladybug Head Armor": "Ladybug Faceplate",
+  "Ladybug Leg Armor": "Ladybug Shin Guards",
+  "Ladybug Part": "Ladybug Part",
+  "Larva Spike": "Larva Spike",
+  "Larvagna": "Larvagna",
+  "Leaf Blower": "Leaf Blower",
+  "Lilypad Wax": "Lilypad Wax",
+  "Lint": "Lint",
+  "Lint Rope": "Lint Rope",
+  "Lucky Hat": "Lucky Hat",
+  "Mac N Bees": "Mac N Bees",
+  "Mantis Chest Armor": "Assassin's Chestplate",
+  "Mantis Head Armor": "Assassin's Mask",
+  "Mantis Leg Armor": "Assassin's Greaves",
+  "Marksman's Cap": "Marksman's Cap",
+  "Mighty Glob": "Mighty Glob",
+  "Mighty Jewel": "Mighty Jewel",
+  "Mint Arrow": "Mint Arrow",
+  "Mint Battle Axe": "Fresh Edge",
+  "Mint Chunk": "Mint Chunk",
+  "Mint Glob": "Mint Glob",
+  "Mint Great Axe": "Frosted Flake",
+  "Mint Greatsword": "Breathslayer",
+  "Mint Jewel": "Mint Jewel",
+  "Mint Katana": "Fresh Coldtana",
+  "Mint Mallet": "Mint Mace",
+  "Mint Staff": "Mint Staff",
+  "Mite Fuzz": "Mite Fuzz",
+  "Mite Hat": "Mite Hat",
+  "Miteloaf": "Miteloaf",
+  "Mosquito Beak": "Mosquito Beak",
+  "Mosquito Blood Sack": "Mosquito Blood Sack",
+  "Mosquito Needle": "Mosquito Needle",
+  "Moth Chest Armor": "Moth Robe",
+  "Moth Fuzz": "Moth Fuzz",
+  "Moth Head Armor": "Moth Wrap",
+  "Moth Leg Armor": "Moth Leggings",
+  "Moth Scale": "Moth Scale",
+  "Muscle Sprout": "Muscle Sprout",
+  "Mushroom": "Mushroom",
+  "Mushroom Brick": "Mushroom Brick",
+  "Mushroom Chunk": "Mushroom Chunk",
+  "Mushroom Slurry": "Mushroom Slurry",
+  "Nectar": "Nectar",
+  "Omelant": "Omelant",
+  "Pebblet": "Pebblet",
+  "Pebblet Axe": "Pebblet Axe",
+  "Pebblet Hammer": "Pebblet Hammer",
+  "Pebblet Spear": "Pebblet Spear",
+  "Pinecone Piece": "Pinecone Piece",
+  "Plant Fiber": "Plant Fiber",
+  "Plant Slurry": "Plant Slurry",
+  "Pollen": "Pollen",
+  "Pond Moss": "Pond Moss",
+  "Pupa Hide": "Pupa Hide",
+  "Pupa Leather": "Pupa Leather",
+  "Quesadillantlion": "Quesadillantlion",
+  "Raw Aphid Meat": "Raw Aphid Meat",
+  "Raw Gnat Meat": "Raw Gnat Meat",
+  "Raw Grub Meat": "Raw Grub Meat",
+  "Raw Tadpole Meat": "Raw Tadpole Meat",
+  "Raw Weevil Meat": "Raw Weevil Meat",
+  "Red Ant Chest Armor": "Red Ant Arm Guards",
+  "Red Ant Club": "Red Ant Club",
+  "Red Ant Egg": "Red Ant Egg",
+  "Red Ant Head": "Red Ant Head",
+  "Red Ant Head Armor": "Red Ant Helmet",
+  "Red Ant Leg Armor": "Red Ant Knee Guards",
+  "Red Ant Mandibles": "Red Ant Mandibles",
+  "Red Ant Part": "Red Ant Part",
+  "Repair Glue": "Repair Glue",
+  "Repair Hammer": "Repair Tool",
+  "Roly Poly Chest Armor": "Roly Poly Breastplate",
+  "Roly Poly Head Armor": "Roly Poly Helmet",
+  "Roly Poly Leg Armor": "Roly Poly Legplates",
+  "Roly Poly Part": "Roly Poly Part",
+  "Roly Poly Shell": "Roly Poly Shell",
+  "Roman Candle": "Roman Candle",
+  "Rotten Food": "Rotten Food",
+  "Rust": "Rust",
+  "Rusty Spear": "Rusty Spear",
+  "Salt Arrow": "Salt Arrow",
+  "Salt Glob": "Salt Glob",
+  "Salt Morning Star": "Salt Morning Star",
+  "Salt Pickaxe": "Salt Chipper",
+  "Salt Shard": "Salt Shard",
+  "Salty Jewel": "Salty Jewel",
+  "Sap": "Sap",
+  "Silk Rope": "Silk Rope",
+  "Slime Mold Stalk": "Slime Mold Stalk",
+  "Smoke Screen": "Shinobi Sneeze",
+  "Soda Drop": "Soda Drop",
+  "Sour Battle Axe": "Acid Edge",
+  "Sour Glob": "Sour Glob",
+  "Sour Greatsword": "Tingle Tongue",
+  "Sour Jewel": "Sour Jewel",
+  "Sour Katana": "Sour Katanga",
+  "Sour Lump": "Sour Lump",
+  "Sour Mallet": "Pucker Thumper",
+  "Sour Staff": "Sour Staff",
+  "Sour Warhammer": "Picklemaul",
+  "Spaghetflea": "Spaghetflea",
+  "Spicy Arrow": "Spicy Arrow",
+  "Spicy Battle Axe": "Blazing Edge",
+  "Spicy Glob": "Spicy Glob",
+  "Spicy Great Axe": "Pepper Flake",
+  "Spicy Jewel": "Spicy Jewel",
+  "Spicy Katana": "Spicy Coaltana",
+  "Spicy Mallet": "Wallope\u00f1o",
+  "Spicy Shard": "Spicy Shard",
+  "Spicy Staff": "Spicy Staff",
+  "Spicy Warhammer": "Sizzle Striker",
+  "Spider Chest Armor": "Spider Shoulder Guard",
+  "Spider Chunk": "Spider Chunk",
+  "Spider Fang": "Spider Fang",
+  "Spider Fang Dagger": "Spider Fang Dagger",
+  "Spider Head Armor": "Spider Hood",
+  "Spider Leg Armor": "Spider Knee Pads",
+  "Spider Slider": "Spider Slider",
+  "Spider Venom": "Spider Venom",
+  "Spiky Bur": "Spiky Bur",
+  "Spiky Sprig": "Spiky Sprig",
+  "Spoiled Meat": "Spoiled Meat",
+  "Spoiled Meat Slurry": "Spoiled Meat Slurry",
+  "Sprig": "Sprig",
+  "Sprig Bow": "Sprig Bow",
+  "Stinger Spear": "Stinger Spear",
+  "Stinkbug Gas Sack": "Stinkbug Gas Sack",
+  "Stinkbug Part": "Stinkbug Part",
+  "Sturdy Marble Shard": "Sturdy Marble Shard",
+  "Sturdy Plating": "Sturdy Plating",
+  "Sturdy Quartzite Shard": "Sturdy Quartzite Shard",
+  "Sturdy Whetstone": "Sturdy Whetstone",
+  "Sunken Bone": "Sunken Bone",
+  "Supreme Marble Shard": "Supreme Marble Shard",
+  "Supreme Plating": "Supreme Plating",
+  "Supreme Quartzite Shard": "Supreme Quartzite Shard",
+  "Supreme Whetstone": "Supreme Whetstone",
+  "Swim Speed Smoothie": "Fluid Flippers",
+  "Tadpole Jerky": "Tadpole Jerky",
+  "Tadpole Pudding": "Tadpoloca Pudding",
+  "Termite Armor": "Termite Armor",
+  "Termite Axe": "Termite Axe",
+  "Termite Chompers": "Termite Chompers",
+  "Termite Delight": "Termite Delight",
+  "Termite Part": "Termite Part",
+  "Thistle Needle": "Thistle Needle",
+  "Tick Fang": "Tick Fang",
+  "Tiger Mosquito Beak": "Tiger Mosquito Beak",
+  "Tiger Mosquito Rapier": "Tiger Mosquito Rapier",
+  "Toadstool Chunk": "Toadstool Chunk",
+  "Toenail": "Toenail",
+  "Torch": "Torch",
+  "Tough Gunk": "Tough Gunk",
+  "Twinkling Shell": "Twinkling Shell",
+  "Upgraded Canteen": "Upgraded Canteen",
+  "Upgraded Diving Lantern": "Upgraded Diving Lantern",
+  "Upgraded Torch": "Upgraded Torch",
+  "Wasp Chest Armor": "Wasp Breastplate",
+  "Wasp Head Armor": "Wasp Morion",
+  "Wasp Leg": "Wasp Leg",
+  "Wasp Leg Armor": "Wasp Greaves",
+  "Wasp Paper": "Wasp Paper",
+  "Wasp Shell": "Wasp Shell",
+  "Wasp Smoothie": "Waspidote",
+  "Wasperole": "Wasperole",
+  "Water Boatman Fin": "Water Boatman Fin",
+  "Water Breathing Smoothie": "Liquid Gills",
+  "Water Flea Jerky": "Water Flea Jerky",
+  "Water Flea Meat": "Water Flea Meat",
+  "Water Flea Roast": "Water Flea Roast",
+  "Web Fiber": "Web Fiber",
+  "Weed Stem": "Weed Stem",
+  "Weevil Jerky": "Weevil Jerky",
+  "Weevil Nose": "Weevil Nose",
+  "Weevil Roast": "Weevil Roast",
+  "Widow Dagger": "Widow Dagger",
+  "Wizard Hat": "Wizard Hat",
+  "Wooden Splinter": "Wooden Splinter"
+ },
+ "recipes": {
+  "Acid Edge": [
+   {
+    "materials": [
+     [
+      "Sour Glob",
+      2
+     ],
+     [
+      "Green Shield Bug Parts",
+      5
+     ],
+     [
+      "Tough Gunk",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Acorn Chestplate": [
+   {
+    "materials": [
+     [
+      "Acorn Shell",
+      3
+     ],
+     [
+      "Berry Chunk",
+      4
+     ],
+     [
+      "Crude Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Acorn Face Mask": [
+   {
+    "materials": [
+     [
+      "Acorn Shell",
+      1
+     ],
+     [
+      "Mite Fuzz",
+      5
+     ],
+     [
+      "Crude Rope",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Acorn Granola": [
+   {
+    "materials": [
+     [
+      "Acorn Bits",
+      2
+     ],
+     [
+      "Honey",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Acorn Leg Plates": [
+   {
+    "materials": [
+     [
+      "Acorn Shell",
+      2
+     ],
+     [
+      "Sap",
+      4
+     ],
+     [
+      "Algae",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Acorn Shovel": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      2
+     ],
+     [
+      "Crude Rope",
+      1
+     ],
+     [
+      "Acorn Shell",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Ant Queen Scepter": [
+   {
+    "materials": [
+     [
+      "Red Ant Part",
+      5
+     ],
+     [
+      "Red Ant Queen Pheromone",
+      1
+     ],
+     [
+      "Sap",
+      10
+     ],
+     [
+      "Red Ant Mandibles",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Antlion Poncho": [
+   {
+    "materials": [
+     [
+      "Antlion Part",
+      3
+     ],
+     [
+      "Antlion Pincer",
+      2
+     ],
+     [
+      "Silk Rope",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Antlion Spurs": [
+   {
+    "materials": [
+     [
+      "Antlion Part",
+      6
+     ],
+     [
+      "Antlion Pincer",
+      1
+     ],
+     [
+      "Bee Fuzz",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Antlion Wide Brim": [
+   {
+    "materials": [
+     [
+      "Antlion Part",
+      5
+     ],
+     [
+      "Silk Rope",
+      3
+     ],
+     [
+      "Boiling Gland",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Aphid Jerky": [
+   {
+    "materials": [
+     [
+      "Raw Aphid Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Aphid Roast": [
+   {
+    "materials": [
+     [
+      "Raw Aphid Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Aphid Slippers": [
+   {
+    "materials": [
+     [
+      "Raw Aphid Meat",
+      2
+     ],
+     [
+      "Mite Fuzz",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Armor Glue": [
+   {
+    "materials": [
+     [
+      "Mite Fuzz",
+      3
+     ],
+     [
+      "Sap",
+      2
+     ],
+     [
+      "Crude Rope",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Ash Cement": [
+   {
+    "materials": [
+     [
+      "Charcoal Ash",
+      2
+     ],
+     [
+      "Clay",
+      2
+     ],
+     [
+      "Rust",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Assassin's Chestplate": [
+   {
+    "materials": [
+     [
+      "Mantis Claw",
+      1
+     ],
+     [
+      "Mantis Chunk",
+      2
+     ],
+     [
+      "Pupa Leather",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Assassin's Greaves": [
+   {
+    "materials": [
+     [
+      "Mantis Claw",
+      1
+     ],
+     [
+      "Mantis Chunk",
+      2
+     ],
+     [
+      "Lint Rope",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Assassin's Mask": [
+   {
+    "materials": [
+     [
+      "Mantis Head",
+      1
+     ],
+     [
+      "Mantis Chunk",
+      2
+     ],
+     [
+      "Pond Moss",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Bee Face Mask": [
+   {
+    "materials": [
+     [
+      "Bee Fuzz",
+      5
+     ],
+     [
+      "Silk Rope",
+      3
+     ],
+     [
+      "Berry Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Bee Fuzz",
+      5
+     ],
+     [
+      "Silk Rope",
+      3
+     ],
+     [
+      "Berry Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Bee Shin Guards": [
+   {
+    "materials": [
+     [
+      "Bee Fuzz",
+      4
+     ],
+     [
+      "Silk Rope",
+      4
+     ],
+     [
+      "Berry Leather",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Bee Shoulder Pads": [
+   {
+    "materials": [
+     [
+      "Bee Fuzz",
+      4
+     ],
+     [
+      "Bee Stinger",
+      1
+     ],
+     [
+      "Berry Leather",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Berry Leather": [
+   {
+    "materials": [
+     [
+      "Berry Chunk",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Berry Chunk",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   },
+   {
+    "materials": [
+     [
+      "Super Armor Glue",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Black Ant Chestplate": [
+   {
+    "materials": [
+     [
+      "Black Ant Part",
+      5
+     ],
+     [
+      "Black Ant Mandibles",
+      2
+     ],
+     [
+      "Bee Fuzz",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ant Helmet": [
+   {
+    "materials": [
+     [
+      "Black Ant Head",
+      1
+     ],
+     [
+      "Black Ant Part",
+      3
+     ],
+     [
+      "Bee Fuzz",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ant Legplates": [
+   {
+    "materials": [
+     [
+      "Black Ant Part",
+      6
+     ],
+     [
+      "Silk Rope",
+      2
+     ],
+     [
+      "Bee Fuzz",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ant Shield": [
+   {
+    "materials": [
+     [
+      "Black Ant Part",
+      5
+     ],
+     [
+      "Red Ant Part",
+      10
+     ],
+     [
+      "Berry Leather",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ant Shovel": [
+   {
+    "materials": [
+     [
+      "Grub Hide",
+      3
+     ],
+     [
+      "Black Ant Mandibles",
+      2
+     ],
+     [
+      "Black Ant Head",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ant Sword": [
+   {
+    "materials": [
+     [
+      "Black Ant Mandibles",
+      2
+     ],
+     [
+      "Black Ant Part",
+      3
+     ],
+     [
+      "Berry Leather",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ox Burger": [
+   {
+    "materials": [
+     [
+      "Black Ox Part",
+      2
+     ],
+     [
+      "Pupa Hide",
+      2
+     ],
+     [
+      "Tough Gunk",
+      5
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Black Ox Crossbow": [
+   {
+    "materials": [
+     [
+      "Rust",
+      6
+     ],
+     [
+      "Black Ox Part",
+      4
+     ],
+     [
+      "Lint Rope",
+      4
+     ],
+     [
+      "Pinecone Piece",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ox Hammer": [
+   {
+    "materials": [
+     [
+      "Black Ox Horn",
+      1
+     ],
+     [
+      "Black Ox Part",
+      5
+     ],
+     [
+      "Pupa Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ox Harness": [
+   {
+    "materials": [
+     [
+      "Black Ox Part",
+      4
+     ],
+     [
+      "Lint Rope",
+      4
+     ],
+     [
+      "Pupa Leather",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ox Helm": [
+   {
+    "materials": [
+     [
+      "Black Ox Horn",
+      2
+     ],
+     [
+      "Black Ox Part",
+      3
+     ],
+     [
+      "Pupa Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Black Ox Legwraps": [
+   {
+    "materials": [
+     [
+      "Black Ox Part",
+      2
+     ],
+     [
+      "Lint Rope",
+      2
+     ],
+     [
+      "Dust Mite Fuzz",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Blazing Edge": [
+   {
+    "materials": [
+     [
+      "Spicy Jewel",
+      2
+     ],
+     [
+      "Green Shield Bug Parts",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Boatman Fin Soup": [
+   {
+    "materials": [
+     [
+      "Water Boatman Fin",
+      2
+     ],
+     [
+      "Mushroom",
+      2
+     ],
+     [
+      "Algae",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Bone Dagger": [
+   {
+    "materials": [
+     [
+      "Sunken Bone",
+      2
+     ],
+     [
+      "Silk Rope",
+      2
+     ],
+     [
+      "Diving Bell Spider Chunk",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Sunken Bone",
+      1
+     ],
+     [
+      "Diving Bell Spider Silk",
+      2
+     ],
+     [
+      "Crude Rope",
+      3
+     ],
+     [
+      "Strider Legs",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Bone Trident": [
+   {
+    "materials": [
+     [
+      "Sunken Bone",
+      3
+     ],
+     [
+      "Diving Bell Spider Chunk",
+      3
+     ],
+     [
+      "Silk Rope",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Boost Juice": [
+   {
+    "materials": [
+     [
+      "Raw Aphid Meat",
+      1
+     ],
+     [
+      "Mushroom",
+      1
+     ],
+     [
+      "Acorn Bits",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Breathslayer": [
+   {
+    "materials": [
+     [
+      "Mint Jewel",
+      2
+     ],
+     [
+      "Rust",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Brittle Plating": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Grub Hide",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Brittle Marble Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Brittle Whetstone": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Larva Spike",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Brittle Quartzite Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Bug Rubber": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Acid Gland",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Canteen": [
+   {
+    "materials": [
+     [
+      "Grub Hide",
+      3
+     ],
+     [
+      "Crude Rope",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Charcoal Ash": [
+   {
+    "materials": [
+     [
+      "EverChar Coal Chunk",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Charcoal Canteen": [
+   {
+    "materials": [
+     [
+      "Pupa Leather",
+      2
+     ],
+     [
+      "Lint Rope",
+      2
+     ],
+     [
+      "EverChar Coal Chunk",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Clover Hood": [
+   {
+    "materials": [
+     [
+      "Clover Leaf",
+      4
+     ],
+     [
+      "Crude Rope",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Clover Poncho": [
+   {
+    "materials": [
+     [
+      "Clover Leaf",
+      6
+     ],
+     [
+      "Crude Rope",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Clover Shin Guards": [
+   {
+    "materials": [
+     [
+      "Clover Leaf",
+      3
+     ],
+     [
+      "Crude Rope",
+      2
+     ],
+     [
+      "Sprig",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Cooked Tadpole Meat": [
+   {
+    "materials": [
+     [
+      "Raw Tadpole Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Crow Crossbow": [
+   {
+    "materials": [
+     [
+      "Crow Feather Piece",
+      6
+     ],
+     [
+      "Acorn Shell",
+      4
+     ],
+     [
+      "Silk Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Crude Rope": [
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      1
+     ]
+    ],
+    "station": "Spinning Wheel"
+   },
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      3
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Decoy Bait": [
+   {
+    "materials": [
+     [
+      "Algae",
+      5
+     ],
+     [
+      "Raw Tadpole Meat",
+      1
+     ],
+     [
+      "Water Flea Meat",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Dry Grass Chunk": [
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Empanadust": [
+   {
+    "materials": [
+     [
+      "Dust Mite Fuzz",
+      4
+     ],
+     [
+      "Termite Part",
+      2
+     ],
+     [
+      "Spicy Shard",
+      1
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "EverChar Torch": [
+   {
+    "materials": [
+     [
+      "EverChar Coal Chunk",
+      1
+     ],
+     [
+      "Tough Gunk",
+      3
+     ],
+     [
+      "Green Shield Bug Parts",
+      2
+     ],
+     [
+      "Lint Rope",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Eyepatch": [
+   {
+    "materials": [
+     [
+      "Crude Rope",
+      1
+     ],
+     [
+      "Fiber Bandage",
+      2
+     ],
+     [
+      "Sap",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Feather Arrow": [
+   {
+    "materials": [
+     [
+      "Crow Feather Piece",
+      1
+     ],
+     [
+      "Silk Rope",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fiber Bandage": [
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      3
+     ],
+     [
+      "Sap",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   },
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      1
+     ],
+     [
+      "Sap",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Fin Flops": [
+   {
+    "materials": [
+     [
+      "Water Boatman Fin",
+      4
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Water Boatman Fin",
+      1
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Strider Legs",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fire Ant Chestplate": [
+   {
+    "materials": [
+     [
+      "Fire Ant Part",
+      5
+     ],
+     [
+      "Fire Ant Mandibles",
+      2
+     ],
+     [
+      "Lint Rope",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fire Ant Helmet": [
+   {
+    "materials": [
+     [
+      "Fire Ant Head",
+      1
+     ],
+     [
+      "Fire Ant Part",
+      3
+     ],
+     [
+      "Lint Rope",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fire Ant Legplates": [
+   {
+    "materials": [
+     [
+      "Fire Ant Part",
+      6
+     ],
+     [
+      "Lint Rope",
+      2
+     ],
+     [
+      "Dust Mite Fuzz",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Firefly Head Lamp": [
+   {
+    "materials": [
+     [
+      "Iridescent Scale",
+      4
+     ],
+     [
+      "Glow Goo",
+      5
+     ],
+     [
+      "Berry Leather",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Flare": [
+   {
+    "materials": [
+     [
+      "Gunpowder Clump",
+      1
+     ],
+     [
+      "Fire Ant Part",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fluid Flippers": [
+   {
+    "materials": [
+     [
+      "Water Boatman Fin",
+      1
+     ],
+     [
+      "Eelgrass Strand",
+      1
+     ],
+     [
+      "Lilypad Wax",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Fresh Coldtana": [
+   {
+    "materials": [
+     [
+      "Mint Jewel",
+      2
+     ],
+     [
+      "Rust",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Fresh Edge": [
+   {
+    "materials": [
+     [
+      "Mint Jewel",
+      2
+     ],
+     [
+      "Green Shield Bug Parts",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Frosted Flake": [
+   {
+    "materials": [
+     [
+      "Mint Jewel",
+      2
+     ],
+     [
+      "Green Shield Bug Parts",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Funguspacho": [
+   {
+    "materials": [
+     [
+      "Fungal Growth",
+      4
+     ],
+     [
+      "Mushroom Chunk",
+      3
+     ],
+     [
+      "Toadstool Chunk",
+      3
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Fuzz on the Rocks": [
+   {
+    "materials": [
+     [
+      "Clay",
+      1
+     ],
+     [
+      "Mite Fuzz",
+      1
+     ],
+     [
+      "Pebblet",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   },
+   {
+    "materials": [
+     [
+      "Quartzite Shard",
+      1
+     ],
+     [
+      "Mite Fuzz",
+      1
+     ],
+     [
+      "Pebblet",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Gastro Goo": [
+   {
+    "materials": [
+     [
+      "Stinkbug Gas Sack",
+      1
+     ],
+     [
+      "Fungal Growth",
+      1
+     ],
+     [
+      "Aphid Honeydew",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Gnat Jerky": [
+   {
+    "materials": [
+     [
+      "Raw Gnat Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Gnat Roast": [
+   {
+    "materials": [
+     [
+      "Raw Gnat Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Gnatchos": [
+   {
+    "materials": [
+     [
+      "Gnat Jerky",
+      1
+     ],
+     [
+      "Acorn Bits",
+      2
+     ],
+     [
+      "Grub Sludge",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Green Machine": [
+   {
+    "materials": [
+     [
+      "Lilypad Wax",
+      1
+     ],
+     [
+      "Sprig",
+      1
+     ],
+     [
+      "Clover Leaf",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Grub Goggles": [
+   {
+    "materials": [
+     [
+      "Grub Hide",
+      3
+     ],
+     [
+      "Raw Weevil Meat",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Grub Jerky": [
+   {
+    "materials": [
+     [
+      "Raw Grub Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Grub Leggings": [
+   {
+    "materials": [
+     [
+      "Grub Hide",
+      4
+     ],
+     [
+      "Dry Grass Chunk",
+      4
+     ],
+     [
+      "Mite Fuzz",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Grub Roast": [
+   {
+    "materials": [
+     [
+      "Raw Grub Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Grub Vest": [
+   {
+    "materials": [
+     [
+      "Grub Hide",
+      5
+     ],
+     [
+      "Grub Sludge",
+      2
+     ],
+     [
+      "Dry Grass Chunk",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Healbasa": [
+   {
+    "materials": [
+     [
+      "Mosquito Blood Sack",
+      1
+     ],
+     [
+      "Silk Rope",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   },
+   {
+    "materials": [
+     [
+      "Mosquito Blood Sack",
+      1
+     ],
+     [
+      "Silk Rope",
+      1
+     ]
+    ],
+    "station": "Sausager"
+   }
+  ],
+  "Hedge Lord": [
+   {
+    "materials": [
+     [
+      "Berry Chunk",
+      1
+     ],
+     [
+      "Aphid Honeydew",
+      1
+     ],
+     [
+      "Acorn Bits",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Human Food": [
+   {
+    "materials": [
+     [
+      "Fresh Apple Bits",
+      1
+     ],
+     [
+      "Fresh Cookie Sandwich Bits",
+      1
+     ],
+     [
+      "Fresh Billy Hog Bite",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Insect Axe": [
+   {
+    "materials": [
+     [
+      "Ladybug Head",
+      1
+     ],
+     [
+      "Bombardier Part",
+      3
+     ],
+     [
+      "Silk Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Insect Bow": [
+   {
+    "materials": [
+     [
+      "Spider Chunk",
+      2
+     ],
+     [
+      "Spider Fang",
+      2
+     ],
+     [
+      "Silk Rope",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Insect Hammer": [
+   {
+    "materials": [
+     [
+      "Stinkbug Part",
+      4
+     ],
+     [
+      "Berry Leather",
+      4
+     ],
+     [
+      "Boiling Gland",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Koi Scale Chestplate": [
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      5
+     ],
+     [
+      "Eelgrass Strand",
+      3
+     ],
+     [
+      "Lilypad Wax",
+      3
+     ],
+     [
+      "Sunken Bone",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      5
+     ],
+     [
+      "Cattail Fluff",
+      3
+     ],
+     [
+      "Eelgrass Strand",
+      3
+     ],
+     [
+      "Lilypad Wax",
+      3
+     ],
+     [
+      "Sunken Bone",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Koi Scale Greaves": [
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      3
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Sunken Bone",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      3
+     ],
+     [
+      "Cattail Fluff",
+      2
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Fin Flops",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Koi Scale Helmet": [
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      2
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Silk Rope",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Koi Fish Scale",
+      2
+     ],
+     [
+      "Bubble Helmet",
+      1
+     ],
+     [
+      "Eelgrass Strand",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Diving Bell Spider Silk",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Ladybird Shield": [
+   {
+    "materials": [
+     [
+      "Ladybird Shell",
+      5
+     ],
+     [
+      "Lint Rope",
+      4
+     ],
+     [
+      "Pupa Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Ladybug Chestplate": [
+   {
+    "materials": [
+     [
+      "Flower Petal",
+      2
+     ],
+     [
+      "Ladybug Part",
+      4
+     ],
+     [
+      "Berry Leather",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Ladybug Faceplate": [
+   {
+    "materials": [
+     [
+      "Ladybug Head",
+      1
+     ],
+     [
+      "Ladybug Part",
+      2
+     ],
+     [
+      "Berry Leather",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Ladybug Shin Guards": [
+   {
+    "materials": [
+     [
+      "Ladybug Part",
+      5
+     ],
+     [
+      "Berry Leather",
+      4
+     ],
+     [
+      "Flower Petal",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Larvagna": [
+   {
+    "materials": [
+     [
+      "Larva Spike",
+      3
+     ],
+     [
+      "Fresh Billy Hog Bite",
+      1
+     ],
+     [
+      "Grub Sludge",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Leaf Blower": [
+   {
+    "materials": [
+     [
+      "Leaf",
+      1
+     ],
+     [
+      "Crude Rope",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Lint Rope": [
+   {
+    "materials": [
+     [
+      "Lint",
+      1
+     ]
+    ],
+    "station": "Spinning Wheel"
+   }
+  ],
+  "Liquid Gills": [
+   {
+    "materials": [
+     [
+      "Water Flea Meat",
+      1
+     ],
+     [
+      "Eelgrass Strand",
+      1
+     ],
+     [
+      "Raw Tadpole Meat",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Liquid Rage": [
+   {
+    "materials": [
+     [
+      "Larva Spike",
+      1
+     ],
+     [
+      "Spider Fang",
+      1
+     ],
+     [
+      "Red Ant Mandibles",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Lucky Hat": [
+   {
+    "materials": [
+     [
+      "Clover Leaf",
+      20
+     ],
+     [
+      "Pupa Leather",
+      1
+     ],
+     [
+      "Chocolate",
+      5
+     ],
+     [
+      "Rainbow Chocolate Chunk",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Mac N Bees": [
+   {
+    "materials": [
+     [
+      "Bee Fuzz",
+      2
+     ],
+     [
+      "Acorn Bits",
+      2
+     ],
+     [
+      "Pollen",
+      1
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Marksman's Cap": [
+   {
+    "materials": [
+     [
+      "Crow Feather Piece",
+      3
+     ],
+     [
+      "Berry Leather",
+      5
+     ],
+     [
+      "Silk Rope",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Mighty Glob": [
+   {
+    "materials": [
+     [
+      "Sturdy Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Mighty Jewel": [
+   {
+    "materials": [
+     [
+      "Supreme Whetstone",
+      1
+     ],
+     [
+      "Twinkling Shell",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Mint Arrow": [
+   {
+    "materials": [
+     [
+      "Feather Arrow",
+      10
+     ],
+     [
+      "Mint Shard",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Mint Glob": [
+   {
+    "materials": [
+     [
+      "Mint Shard",
+      2
+     ],
+     [
+      "Sturdy Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Mint Jewel": [
+   {
+    "materials": [
+     [
+      "Mint Shard",
+      2
+     ],
+     [
+      "Twinkling Shell",
+      1
+     ],
+     [
+      "Supreme Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Mint Mace": [
+   {
+    "materials": [
+     [
+      "Mint Glob",
+      2
+     ],
+     [
+      "Flower Petal",
+      5
+     ],
+     [
+      "Tough Gunk",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Mint Staff": [
+   {
+    "materials": [
+     [
+      "Mint Glob",
+      5
+     ],
+     [
+      "Pinecone Piece",
+      5
+     ],
+     [
+      "Tough Gunk",
+      5
+     ],
+     [
+      "Crow Feather Piece",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Mite Fuzz": [
+   {
+    "materials": [
+     [
+      "Armor Glue",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Mite Hat": [
+   {
+    "materials": [
+     [
+      "Mite Fuzz",
+      5
+     ],
+     [
+      "Grub Hide",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Miteloaf": [
+   {
+    "materials": [
+     [
+      "Mite Fuzz",
+      4
+     ],
+     [
+      "Mushroom",
+      2
+     ],
+     [
+      "Aphid Jerky",
+      1
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Mosquito Needle": [
+   {
+    "materials": [
+     [
+      "Mosquito Beak",
+      2
+     ],
+     [
+      "Silk Rope",
+      2
+     ],
+     [
+      "Mosquito Blood Sack",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Moth Leggings": [
+   {
+    "materials": [
+     [
+      "Pond Moss",
+      4
+     ],
+     [
+      "Moth Fuzz",
+      4
+     ],
+     [
+      "Pupa Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Moth Robe": [
+   {
+    "materials": [
+     [
+      "Moth Fuzz",
+      5
+     ],
+     [
+      "Pupa Leather",
+      3
+     ],
+     [
+      "Lint Rope",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Moth Wrap": [
+   {
+    "materials": [
+     [
+      "Moth Scale",
+      2
+     ],
+     [
+      "Moth Fuzz",
+      3
+     ],
+     [
+      "Lint Rope",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Mushroom Brick": [
+   {
+    "materials": [
+     [
+      "Mushroom Slurry",
+      5
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Mushroom Slurry": [
+   {
+    "materials": [
+     [
+      "Mushroom Chunk",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Toadstool Chunk",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Mushroom",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Omelant": [
+   {
+    "materials": [
+     [
+      "Black Ant Egg",
+      1
+     ],
+     [
+      "Salt Shard",
+      2
+     ],
+     [
+      "Algae",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Pebblet Axe": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      3
+     ],
+     [
+      "Pebblet",
+      2
+     ],
+     [
+      "Crude Rope",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Pebblet Hammer": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      3
+     ],
+     [
+      "Pebblet",
+      4
+     ],
+     [
+      "Crude Rope",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Pebblet Spear": [
+   {
+    "materials": [
+     [
+      "Pebblet",
+      1
+     ],
+     [
+      "Plant Fiber",
+      3
+     ],
+     [
+      "Sprig",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Pepper Flake": [
+   {
+    "materials": [
+     [
+      "Spicy Jewel",
+      2
+     ],
+     [
+      "Green Shield Bug Parts",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Picklemaul": [
+   {
+    "materials": [
+     [
+      "Sour Jewel",
+      2
+     ],
+     [
+      "Flower Petal",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Plant Fiber": [
+   {
+    "materials": [
+     [
+      "Clover Leaf",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Sprig",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Eelgrass Strand",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Grass Plank",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   },
+   {
+    "materials": [
+     [
+      "Weed Stem",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Plant Slurry": [
+   {
+    "materials": [
+     [
+      "Plant Fiber",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Pucker Thumper": [
+   {
+    "materials": [
+     [
+      "Sour Jewel",
+      2
+     ],
+     [
+      "Flower Petal",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Pupa Leather": [
+   {
+    "materials": [
+     [
+      "Pupa Hide",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Pupa Hide",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Quesadillantlion": [
+   {
+    "materials": [
+     [
+      "Antlion Part",
+      2
+     ],
+     [
+      "Salt Shard",
+      6
+     ],
+     [
+      "Spicy Shard",
+      1
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Red Ant Arm Guards": [
+   {
+    "materials": [
+     [
+      "Red Ant Part",
+      5
+     ],
+     [
+      "Acid Gland",
+      2
+     ],
+     [
+      "Mite Fuzz",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Red Ant Club": [
+   {
+    "materials": [
+     [
+      "Red Ant Part",
+      4
+     ],
+     [
+      "Crude Rope",
+      2
+     ],
+     [
+      "Red Ant Mandibles",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Red Ant Helmet": [
+   {
+    "materials": [
+     [
+      "Red Ant Head",
+      1
+     ],
+     [
+      "Red Ant Part",
+      3
+     ],
+     [
+      "Mite Fuzz",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Red Ant Knee Guards": [
+   {
+    "materials": [
+     [
+      "Red Ant Part",
+      6
+     ],
+     [
+      "Crude Rope",
+      2
+     ],
+     [
+      "Mite Fuzz",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Repair Glue": [
+   {
+    "materials": [
+     [
+      "Termite Part",
+      4
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Roly Poly Part",
+      2
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Stinkbug Part",
+      6
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Ladybug Part",
+      5
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Antlion Part",
+      3
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Bombardier Part",
+      5
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Black Ox Part",
+      2
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Spider Chunk",
+      8
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Mint Shard",
+      10
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Spicy Shard",
+      10
+     ]
+    ],
+    "station": "Glue Masher"
+   },
+   {
+    "materials": [
+     [
+      "Sour Lump",
+      10
+     ]
+    ],
+    "station": "Glue Masher"
+   }
+  ],
+  "Repair Tool": [
+   {
+    "materials": [
+     [
+      "Crude Rope",
+      3
+     ],
+     [
+      "Red Ant Part",
+      2
+     ],
+     [
+      "Clay",
+      4
+     ]
+    ],
+    "station": "Crafted by Hand"
+   },
+   {
+    "materials": [
+     [
+      "Crude Rope",
+      3
+     ],
+     [
+      "Sprig",
+      2
+     ],
+     [
+      "Quartzite Shard",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Roly Poly Breastplate": [
+   {
+    "materials": [
+     [
+      "Roly Poly Part",
+      8
+     ],
+     [
+      "Roly Poly Shell",
+      2
+     ],
+     [
+      "Pupa Leather",
+      7
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Roly Poly Helmet": [
+   {
+    "materials": [
+     [
+      "Lint Rope",
+      5
+     ],
+     [
+      "Roly Poly Shell",
+      3
+     ],
+     [
+      "Pupa Leather",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Roly Poly Legplates": [
+   {
+    "materials": [
+     [
+      "Roly Poly Part",
+      2
+     ],
+     [
+      "Roly Poly Shell",
+      4
+     ],
+     [
+      "Lint Rope",
+      6
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Roman Candle": [
+   {
+    "materials": [
+     [
+      "Gunpowder Clump",
+      1
+     ],
+     [
+      "Berry Leather",
+      2
+     ],
+     [
+      "Sap",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Rusty Spear": [
+   {
+    "materials": [
+     [
+      "Dust Mite Fuzz",
+      3
+     ],
+     [
+      "Rust",
+      7
+     ],
+     [
+      "Sunken Bone",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Salt Arrow": [
+   {
+    "materials": [
+     [
+      "Feather Arrow",
+      10
+     ],
+     [
+      "Salt Shard",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Salt Chipper": [
+   {
+    "materials": [
+     [
+      "Salty Jewel",
+      5
+     ],
+     [
+      "Gum Nugget",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Salt Glob": [
+   {
+    "materials": [
+     [
+      "Salt Shard",
+      3
+     ],
+     [
+      "Sturdy Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Salt Morning Star": [
+   {
+    "materials": [
+     [
+      "Salt Glob",
+      2
+     ],
+     [
+      "Gum Nugget",
+      5
+     ],
+     [
+      "Tough Gunk",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Salt Glob",
+      2
+     ],
+     [
+      "Gum Nugget",
+      1
+     ],
+     [
+      "Sickly Roly Poly Part",
+      3
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Salty Jewel": [
+   {
+    "materials": [
+     [
+      "Salt Shard",
+      3
+     ],
+     [
+      "Twinkling Shell",
+      1
+     ],
+     [
+      "Supreme Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Shinobi Sneeze": [
+   {
+    "materials": [
+     [
+      "Pollen",
+      3
+     ],
+     [
+      "Grub Hide",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Silk Rope": [
+   {
+    "materials": [
+     [
+      "Web Fiber",
+      1
+     ]
+    ],
+    "station": "Spinning Wheel"
+   }
+  ],
+  "Sizzle Striker": [
+   {
+    "materials": [
+     [
+      "Spicy Jewel",
+      2
+     ],
+     [
+      "Flower Petal",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Sour Glob": [
+   {
+    "materials": [
+     [
+      "Sour Lump",
+      2
+     ],
+     [
+      "Sturdy Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Sour Jewel": [
+   {
+    "materials": [
+     [
+      "Sour Lump",
+      2
+     ],
+     [
+      "Twinkling Shell",
+      1
+     ],
+     [
+      "Supreme Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Sour Katanga": [
+   {
+    "materials": [
+     [
+      "Sour Jewel",
+      2
+     ],
+     [
+      "Rust",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Sour Staff": [
+   {
+    "materials": [
+     [
+      "Sour Glob",
+      5
+     ],
+     [
+      "Pinecone Piece",
+      5
+     ],
+     [
+      "Tough Gunk",
+      5
+     ],
+     [
+      "Pond Moss",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spaghetflea": [
+   {
+    "materials": [
+     [
+      "Water Flea Roast",
+      1
+     ],
+     [
+      "Acorn Bits",
+      2
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Spicy Arrow": [
+   {
+    "materials": [
+     [
+      "Feather Arrow",
+      10
+     ],
+     [
+      "Spicy Shard",
+      1
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Spicy Coaltana": [
+   {
+    "materials": [
+     [
+      "Spicy Glob",
+      2
+     ],
+     [
+      "EverChar Coal Chunk",
+      5
+     ],
+     [
+      "Tough Gunk",
+      10
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spicy Glob": [
+   {
+    "materials": [
+     [
+      "Spicy Shard",
+      2
+     ],
+     [
+      "Sturdy Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Spicy Jewel": [
+   {
+    "materials": [
+     [
+      "Spicy Shard",
+      2
+     ],
+     [
+      "Twinkling Shell",
+      1
+     ],
+     [
+      "Supreme Whetstone",
+      1
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Spicy Staff": [
+   {
+    "materials": [
+     [
+      "Spicy Glob",
+      5
+     ],
+     [
+      "Pinecone Piece",
+      5
+     ],
+     [
+      "Tough Gunk",
+      5
+     ],
+     [
+      "Fire Ant Mandibles",
+      5
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spider Fang Dagger": [
+   {
+    "materials": [
+     [
+      "Spider Fang",
+      1
+     ],
+     [
+      "Silk Rope",
+      3
+     ],
+     [
+      "Spider Venom",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spider Hood": [
+   {
+    "materials": [
+     [
+      "Spider Fang",
+      2
+     ],
+     [
+      "Spider Chunk",
+      3
+     ],
+     [
+      "Berry Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spider Knee Pads": [
+   {
+    "materials": [
+     [
+      "Spider Chunk",
+      4
+     ],
+     [
+      "Silk Rope",
+      4
+     ],
+     [
+      "Berry Leather",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spider Shoulder Guard": [
+   {
+    "materials": [
+     [
+      "Spider Chunk",
+      5
+     ],
+     [
+      "Berry Leather",
+      3
+     ],
+     [
+      "Silk Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Spider Slider": [
+   {
+    "materials": [
+     [
+      "Spider Chunk",
+      5
+     ],
+     [
+      "Nectar",
+      1
+     ],
+     [
+      "Berry Chunk",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Spiky Sprig": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      3
+     ],
+     [
+      "Thistle Needle",
+      5
+     ],
+     [
+      "Crude Rope",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Spoiled Meat Slurry": [
+   {
+    "materials": [
+     [
+      "Spoiled Meat",
+      1
+     ]
+    ],
+    "station": "Grinder"
+   }
+  ],
+  "Sprig Bow": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      3
+     ],
+     [
+      "Gnat Fuzz",
+      4
+     ],
+     [
+      "Crude Rope",
+      2
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Stinger Spear": [
+   {
+    "materials": [
+     [
+      "Bee Stinger",
+      1
+     ],
+     [
+      "Bee Fuzz",
+      5
+     ],
+     [
+      "Silk Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Sturdy Plating": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Ladybug Part",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Sturdy Marble Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Sturdy Whetstone": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Spider Fang",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Sturdy Quartzite Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Super Armor Glue": [
+   {
+    "materials": [
+     [
+      "Berry Leather",
+      1
+     ],
+     [
+      "Web Fiber",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Supreme Plating": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Ladybird Shell",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Supreme Marble Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Supreme Whetstone": [
+   {
+    "materials": [
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Black Ox Horn",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   },
+   {
+    "materials": [
+     [
+      "Supreme Quartzite Shard",
+      1
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Tadpole Jerky": [
+   {
+    "materials": [
+     [
+      "Raw Tadpole Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Tadpoloca Pudding": [
+   {
+    "materials": [
+     [
+      "Tadpole Jerky",
+      1
+     ],
+     [
+      "Lilypad Wax",
+      2
+     ],
+     [
+      "Mint Shard",
+      2
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Termite Armor": [
+   {
+    "materials": [
+     [
+      "Termite Part",
+      5
+     ],
+     [
+      "Lint Rope",
+      2
+     ],
+     [
+      "Termite King Carapace",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Termite Axe": [
+   {
+    "materials": [
+     [
+      "Termite Chompers",
+      2
+     ],
+     [
+      "Crow Feather Piece",
+      4
+     ],
+     [
+      "Tough Gunk",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Termite Delight": [
+   {
+    "materials": [
+     [
+      "Termite Part",
+      5
+     ],
+     [
+      "Dust Mite Fuzz",
+      1
+     ],
+     [
+      "Tough Gunk",
+      1
+     ]
+    ],
+    "station": "Cookery"
+   },
+   {
+    "materials": [
+     [
+      "Termite Part",
+      4
+     ],
+     [
+      "Dust Mite Fuzz",
+      2
+     ],
+     [
+      "Tough Gunk",
+      2
+     ]
+    ],
+    "station": "Oven"
+   }
+  ],
+  "Tiger Mosquito Rapier": [
+   {
+    "materials": [
+     [
+      "Tiger Mosquito Beak",
+      2
+     ],
+     [
+      "Rust",
+      4
+     ],
+     [
+      "Mosquito Blood Sack",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Tingle Tongue": [
+   {
+    "materials": [
+     [
+      "Sour Jewel",
+      2
+     ],
+     [
+      "Rust",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Torch": [
+   {
+    "materials": [
+     [
+      "Sprig",
+      2
+     ],
+     [
+      "Sap",
+      1
+     ],
+     [
+      "Crude Rope",
+      2
+     ],
+     [
+      "Dry Grass Chunk",
+      3
+     ]
+    ],
+    "station": "Crafted by Hand"
+   }
+  ],
+  "Wallope\u00f1o": [
+   {
+    "materials": [
+     [
+      "Spicy Jewel",
+      2
+     ],
+     [
+      "Flower Petal",
+      5
+     ],
+     [
+      "DeDuper Jelly",
+      2
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Wasp Breastplate": [
+   {
+    "materials": [
+     [
+      "Wasp Shell",
+      4
+     ],
+     [
+      "Pupa Leather",
+      2
+     ],
+     [
+      "Wasp Leg",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Wasp Greaves": [
+   {
+    "materials": [
+     [
+      "Wasp Leg",
+      2
+     ],
+     [
+      "Wasp Shell",
+      4
+     ],
+     [
+      "Lint Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Wasp Morion": [
+   {
+    "materials": [
+     [
+      "Wasp Shell",
+      2
+     ],
+     [
+      "Pupa Leather",
+      1
+     ],
+     [
+      "Lint Rope",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Wasperole": [
+   {
+    "materials": [
+     [
+      "Wasp Shell",
+      3
+     ],
+     [
+      "Wasp Paper",
+      3
+     ],
+     [
+      "Spider Venom",
+      3
+     ]
+    ],
+    "station": "Cookery"
+   }
+  ],
+  "Waspidote": [
+   {
+    "materials": [
+     [
+      "Wasp Shell",
+      1
+     ],
+     [
+      "Wasp Paper",
+      1
+     ],
+     [
+      "Spider Venom",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ],
+  "Water Flea Jerky": [
+   {
+    "materials": [
+     [
+      "Water Flea Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Water Flea Roast": [
+   {
+    "materials": [
+     [
+      "Water Flea Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Weevil Jerky": [
+   {
+    "materials": [
+     [
+      "Raw Weevil Meat",
+      1
+     ]
+    ],
+    "station": "Jerky Rack"
+   }
+  ],
+  "Weevil Roast": [
+   {
+    "materials": [
+     [
+      "Raw Weevil Meat",
+      1
+     ]
+    ],
+    "station": "Roasting Spit"
+   }
+  ],
+  "Widow Dagger": [
+   {
+    "materials": [
+     [
+      "Black Widow Fang",
+      1
+     ],
+     [
+      "Lint Rope",
+      3
+     ],
+     [
+      "Super Spider Venom",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Wizard Hat": [
+   {
+    "materials": [
+     [
+      "Crow Feather Piece",
+      3
+     ],
+     [
+      "Berry Leather",
+      10
+     ],
+     [
+      "Termite King Carapace",
+      4
+     ]
+    ],
+    "station": "Workbench"
+   }
+  ],
+  "Worker's Comp": [
+   {
+    "materials": [
+     [
+      "Red Ant Part",
+      1
+     ],
+     [
+      "Red Ant Head",
+      1
+     ],
+     [
+      "Red Ant Mandibles",
+      1
+     ]
+    ],
+    "station": "Smoothie Station"
+   }
+  ]
+ }
+}

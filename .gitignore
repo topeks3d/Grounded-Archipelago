@@ -1,0 +1,14 @@
+# Build output and local caches
+dist/
+connector/tools/.cache/
+__pycache__/
+*.pyc
+
+# Runtime files the mod and client write
+game_mod/GroundedArchipelago/ipc/
+*.apworld.tmp
+
+# wand.com map data: its terms do not allow redistribution (see README).
+# Recreate it locally with: python connector/tools/fetch_online_data.py --map
+apworld/grounded/data/map.png
+apworld/grounded/data/landmark_pins.json
