@@ -12,3 +12,7 @@ game_mod/GroundedArchipelago/ipc/
 # Recreate it locally with: python connector/tools/fetch_online_data.py --map
 apworld/grounded/data/map.png
 apworld/grounded/data/landmark_pins.json
+
+# Developer-only cheats: never published (see DEV_NOTES.md)
+apworld/grounded/cheats_tab.py
+game_mod/GroundedArchipelagoCheats/

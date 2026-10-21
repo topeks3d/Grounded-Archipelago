@@ -27,6 +27,7 @@ local notifications = require("notifications")
 local deathlink = require("deathlink")
 local mutations = require("mutations")
 local ending_gate = require("ending_gate")
+local reminders = require("reminders")
 local ap_loop = require("ap_loop")
 local diagnose = require("diagnose")
 
@@ -68,6 +69,11 @@ end
 -- The sync loop: the only caller of item_grants.apply, so retrying an item
 -- whose grant returned false lives in one place.
 local was_in_world = false
+-- Whether the mod's game-data edits (research, gold cards, recipe and drop
+-- shuffles) are wanted: true in the Archipelago world, false in any other
+-- loaded world (everything put back to vanilla), nil on the main menu
+-- before any world (left as it is until one loads).
+local ap_active = nil
 
 local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
     local status = ipc:poll()
@@ -79,10 +85,13 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
 
     -- Only inside the Archipelago world: on the main menu grants "succeed"
     -- against nothing.
-    local gate_ok, in_world = pcall(world_gate.check, config)
+    local gate_ok, in_world, world_name, ap_world = pcall(world_gate.check, config)
     if not gate_ok then
         log("world_gate.check failed, treating as not in world: " .. tostring(in_world))
-        in_world = false
+        in_world, world_name, ap_world = false, nil, false
+    end
+    if world_name then
+        ap_active = ap_world == true
     end
     if was_in_world and not in_world then
         research_control.on_world_left()
@@ -109,31 +118,33 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
     ipc:_flush_from_game()
 
     -- Research/brainpower control and up-front category unlocks.
-    local research_ok, research_err = pcall(research_control.tick, config, in_world)
+    local research_ok, research_err = pcall(research_control.tick, config, in_world, ap_active)
     if not research_ok then
         log("research_control.tick failed, continuing anyway: " .. tostring(research_err))
     end
 
     -- Gold card drop chance: patched straight into the bestiary table
-    -- (see location_hooks.apply_gold_card_drop_chance).
-    local gold_ok, gold_err = pcall(
-        location_hooks.apply_gold_card_drop_chance,
-        config.gold_card_drop_chance_override or ipc.gold_card_drop_chance
-    )
-    if not gold_ok then
-        log("location_hooks.apply_gold_card_drop_chance failed, continuing anyway: " .. tostring(gold_err))
-    end
+    -- (see location_hooks.apply_gold_card_drop_chance); 0 = vanilla.
+    if ap_active ~= nil then
+        local gold_ok, gold_err = pcall(
+            location_hooks.apply_gold_card_drop_chance,
+            ap_active and (config.gold_card_drop_chance_override or ipc.gold_card_drop_chance) or 0
+        )
+        if not gold_ok then
+            log("location_hooks.apply_gold_card_drop_chance failed, continuing anyway: " .. tostring(gold_err))
+        end
 
-    -- RecipeShuffle: rewrites Tier 2/3 gear ingredients in the recipe
-    -- table. Safe (and best) to do before the world loads.
-    local shuffle_ok, shuffle_err = pcall(recipe_shuffle.tick, ipc, status.recipe_shuffle)
-    if not shuffle_ok then
-        log("recipe_shuffle.tick failed, continuing anyway: " .. tostring(shuffle_err))
+        -- RecipeShuffle: rewrites Tier 2/3 gear ingredients in the recipe
+        -- table as soon as the world starts loading; {} = vanilla.
+        local shuffle_ok, shuffle_err = pcall(recipe_shuffle.tick, ipc, ap_active and status.recipe_shuffle or {})
+        if not shuffle_ok then
+            log("recipe_shuffle.tick failed, continuing anyway: " .. tostring(shuffle_err))
+        end
     end
 
     -- CreatureDropShuffle: applied per kill by the creature-death hook
     -- (see drop_shuffle.lua); this just keeps its mapping current.
-    drop_shuffle.set_mapping(status.creature_drop_shuffle)
+    drop_shuffle.set_mapping(ap_active and status.creature_drop_shuffle or {})
 
     -- Landmark discovery (see landmarks.lua). Runs in any world:
     -- report_location itself decides whether anything is sent.
@@ -143,6 +154,15 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
     end
 
     pcall(notifications.tick)
+
+    -- "This world isn't the Archipelago one" / "not connected" reminders.
+    local reminder_ok, reminder_err = pcall(function()
+        local spawned = world_name ~= nil and world_gate.player_character_spawned()
+        reminders.tick(config, world_name, ap_world, in_world, status.client_connected == true, spawned)
+    end)
+    if not reminder_ok then
+        log("reminders.tick failed, continuing anyway: " .. tostring(reminder_err))
+    end
 
     local death_ok, death_err = pcall(deathlink.tick, ipc, status, in_world)
     if not death_ok then

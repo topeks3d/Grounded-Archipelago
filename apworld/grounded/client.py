@@ -24,6 +24,9 @@ NOTIFICATION_HISTORY = 30
 # A local death this soon after a received DeathLink is that DeathLink's
 # own death -- don't bounce it back out.
 DEATH_LINK_GRACE_SECONDS = 10.0
+# client_heartbeat.json is rewritten this often; the mod treats one older
+# than 20 seconds as "the client isn't running" (ap_ipc.lua).
+HEARTBEAT_SECONDS = 5.0
 
 
 def _item_field(item, name: str, index: int):
@@ -443,6 +446,17 @@ def _build_context_class():
                     # Checks grouped by biome, coloured by logic (tracker_tab.py).
                     from .tracker_tab import make_tracker_view
                     self.tracker_tab = self.add_client_tab("Tracker", make_tracker_view(self.ctx))
+                    # Developer-only Cheats tab, when cheats_tab.py is present
+                    # (it isn't in releases or the public repository).
+                    try:
+                        from .cheats_tab import make_cheats_view
+                    except ImportError:
+                        make_cheats_view = None
+                    if make_cheats_view:
+                        try:
+                            self.cheats_tab = self.add_client_tab("Cheats", make_cheats_view(self.ctx))
+                        except Exception:
+                            logger.exception("Couldn't build the Cheats tab")
                     # No Hints tab: the Tracker shows what's left and where. (kvui
                     # keeps updating its hint log in the background, harmlessly.)
                     for tab in list(self.tabs.children):
@@ -487,11 +501,21 @@ async def _async_main(args) -> None:
 async def _ipc_sync_task(ctx) -> None:
     from CommonClient import logger
 
+    last_heartbeat = 0.0
     while not ctx.exit_event.is_set():
         try:
             await ctx.read_from_game_and_act()
         except Exception:
             logger.exception("Error while syncing from the game mod")
+        # to_game.json only changes on events, so the mod can't tell from it
+        # whether the client is still running: this file says so.
+        if time.monotonic() - last_heartbeat >= HEARTBEAT_SECONDS:
+            last_heartbeat = time.monotonic()
+            try:
+                _write_json_atomic(ctx.ipc_dir / "client_heartbeat.json",
+                                   {"time": int(time.time()), "connected": ctx._is_connected()})
+            except OSError:
+                logger.exception("Couldn't write client_heartbeat.json")
         await asyncio.sleep(IPC_POLL_SECONDS)
 
 
@@ -576,7 +600,9 @@ def launch(*launch_args: str) -> None:
         default=None,
         help="Slot name to connect as. If omitted, you'll be prompted for it interactively.",
     )
-    args = parser.parse_args(launch_args if launch_args else None)
+    # Only what the Launcher passed: sys.argv still holds the component name
+    # when started as `ArchipelagoLauncher "Grounded Client"`.
+    args = parser.parse_args(list(launch_args))
 
     if not args.ipc_dir:
         detected = _find_grounded_ipc_dir()

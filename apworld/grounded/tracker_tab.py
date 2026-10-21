@@ -216,33 +216,28 @@ def _visited_from_mod(data: dict) -> set:
     return {name for name in names if isinstance(name, str) and name.startswith(LANDMARK_PREFIX)}
 
 
-def make_tracker_view(ctx):
-    """The tab's root widget. Refreshes itself once a second when anything
-    it shows has changed."""
+def ui_kit():
+    """Kivy building blocks shared by the client's tabs (this one and the
+    developer-only Cheats tab): markup labels, rounded backgrounds, item
+    icons, popups and the clickable hover tile. Needs a running app."""
     import io
+    from types import SimpleNamespace
 
     from kivy.clock import Clock
     from kivy.core.image import Image as CoreImage
-    from kivy.graphics import Color, Ellipse, Line, Rectangle, RoundedRectangle
-    from kivy.graphics.transformation import Matrix
+    from kivy.core.window import Window
+    from kivy.graphics import Color, RoundedRectangle
     from kivy.metrics import dp, sp
-    from kivy.uix.label import Label
     from kivy.uix.behaviors import ButtonBehavior
     from kivy.uix.image import Image
+    from kivy.uix.label import Label
     from kivy.uix.modalview import ModalView
-    from kivy.uix.relativelayout import RelativeLayout
-    from kivy.uix.scatter import Scatter
-    from kivy.uix.scrollview import ScrollView
-    from kivy.uix.stencilview import StencilView
     from kivy.uix.widget import Widget
     from kivy.utils import escape_markup
     from kivymd.app import MDApp
-    from kivymd.uix.boxlayout import MDBoxLayout
-    from kivymd.uix.button import MDButton, MDButtonText
-    from kivymd.uix.gridlayout import MDGridLayout
-    from kivy.core.window import Window
     from kivymd.icon_definitions import md_icons
     from kivymd.uix.behaviors import HoverBehavior
+    from kivymd.uix.boxlayout import MDBoxLayout
     from kivymd.uix.label import MDLabel
 
     from . import online_data
@@ -278,16 +273,6 @@ def make_tracker_view(ctx):
             textures[key] = CoreImage(io.BytesIO(data), ext="png").texture if data else None
         return textures[key]
 
-    def kind_icon(check: Check, size: float) -> Widget:
-        """The item's own icon for items / crafts, otherwise a symbol."""
-        if check.kind in ("Items", "Crafting"):
-            item = check.mod_name.split(": ", 1)[-1]
-            if online_data.icon_png(item):
-                return icon_widget(item, size)
-        glyph = md_icon(_KIND_ICONS.get(check.kind, "star-four-points-outline"))
-        return Label(text=_ICON_FONT.format(glyph), markup=True, size_hint_x=None, width=size, font_size=sp(22),
-                     color=(0.75, 0.80, 0.86, 1))
-
     def icon_widget(name: str, size: float) -> Widget:
         tex = texture("icon:" + name, online_data.icon_png(name))
         if tex is None:
@@ -318,6 +303,125 @@ def make_tracker_view(ctx):
         row.add_widget(text)
         card.add_widget(row)
 
+    def section(card, title: str):
+        card.add_widget(label(f"[b]{title}[/b]", style="Title", role="small"))
+
+    class Chip(Label):
+        """Small rounded status label."""
+
+        def __init__(self, text: str, rgb, **kwargs):
+            super().__init__(text=text, font_size=sp(12), halign="center", valign="middle",
+                             size_hint=(None, None), size=(dp(62), dp(22)), color=(*rgb, 1),
+                             pos_hint={"center_y": 0.5}, **kwargs)
+            with self.canvas.before:
+                Color(*rgb, 0.16)
+                self._rect = RoundedRectangle(radius=[dp(11)])
+            self.bind(pos=self._move, size=self._move)
+
+        def _move(self, *_args):
+            self._rect.pos, self._rect.size = self.pos, self.size
+
+    class HoverTile(ButtonBehavior, HoverBehavior, MDBoxLayout):
+        """A clickable row: icon, title, an optional chip and a "details"
+        chevron, with a coloured bar down its left edge. Lights up (with a
+        hand cursor) under the mouse; on_click() runs on release."""
+
+        def __init__(self, icon: Widget, title_markup: str, bar_rgb=(0.6, 0.63, 0.67), bar_alpha=0.95,
+                     chip: Optional[Widget] = None, dimmed: bool = False, **kwargs):
+            super().__init__(orientation="horizontal", size_hint_y=None, height=dp(48),
+                             padding=(dp(14), dp(6), dp(10), dp(6)), spacing=dp(10), **kwargs)
+            self._hover_ready = False
+            Clock.schedule_once(lambda dt: setattr(self, "_hover_ready", True), 0.25)
+            with self.canvas.before:
+                self.bg = Color(1, 1, 1, 0.045)
+                self._bg = RoundedRectangle(radius=[dp(10)])
+                Color(*bar_rgb, bar_alpha)
+                self._bar = RoundedRectangle(radius=[dp(2)])
+            self.bind(pos=self._layout_bg, size=self._layout_bg)
+
+            self.add_widget(icon)
+            # Plain Kivy labels: KivyMD re-themes custom text colours on rebuilt widgets.
+            title = Label(text=title_markup, markup=True, font_size=sp(16),
+                          shorten=True, shorten_from="right", halign="left", valign="middle",
+                          color=(0.62, 0.64, 0.67, 1) if dimmed else (0.94, 0.95, 0.96, 1))
+            title.bind(size=lambda inst, size: setattr(inst, "text_size", size))
+            self.add_widget(title)
+            if chip is not None:
+                self.add_widget(chip)
+            self.chevron = Label(text=_ICON_FONT.format(md_icon("chevron-right")), markup=True, size_hint_x=None,
+                                 width=dp(16), font_size=sp(18), color=(1, 1, 1, 0.35))
+            self.add_widget(self.chevron)
+
+        def _layout_bg(self, *_args):
+            self._bg.pos, self._bg.size = self.pos, self.size
+            self._bar.pos, self._bar.size = (self.x + dp(4), self.y + dp(9)), (dp(4), self.height - dp(18))
+
+        def on_enter(self, *_args):
+            # Freshly built tiles all sit at (0, 0) until laid out, so the
+            # mouse can "enter" every one of them at once: ignore hovers
+            # until the layout has settled.
+            if not self._hover_ready:
+                return
+            self.bg.a = 0.11
+            self.chevron.color = (1, 1, 1, 0.9)
+            Window.set_system_cursor("hand")
+
+        def on_leave(self, *_args):
+            self.bg.a = 0.045
+            self.chevron.color = (1, 1, 1, 0.35)
+            Window.set_system_cursor("arrow")
+
+        def on_release(self):
+            Window.set_system_cursor("arrow")
+            self.on_click()
+
+        def on_click(self):
+            pass
+
+    return SimpleNamespace(md_icon=md_icon, theme_colour=theme_colour, label=label, paint=paint, texture=texture,
+                           icon_widget=icon_widget, popup=popup, header=header, section=section, Chip=Chip,
+                           HoverTile=HoverTile)
+
+
+def make_tracker_view(ctx):
+    """The tab's root widget. Refreshes itself once a second when anything
+    it shows has changed."""
+    from kivy.clock import Clock
+    from kivy.graphics import Color, Ellipse, Line, Rectangle, RoundedRectangle
+    from kivy.graphics.transformation import Matrix
+    from kivy.metrics import dp, sp
+    from kivy.uix.label import Label
+    from kivy.uix.behaviors import ButtonBehavior
+    from kivy.uix.image import Image
+    from kivy.uix.relativelayout import RelativeLayout
+    from kivy.uix.scatter import Scatter
+    from kivy.uix.scrollview import ScrollView
+    from kivy.uix.stencilview import StencilView
+    from kivy.uix.widget import Widget
+    from kivy.utils import escape_markup
+    from kivymd.uix.boxlayout import MDBoxLayout
+    from kivymd.uix.button import MDButton, MDButtonText
+    from kivymd.uix.gridlayout import MDGridLayout
+    from kivymd.uix.label import MDLabel
+
+    from . import online_data
+
+    kit = ui_kit()
+    md_icon, theme_colour, label, paint, texture = kit.md_icon, kit.theme_colour, kit.label, kit.paint, kit.texture
+    icon_widget, popup, header, section = kit.icon_widget, kit.popup, kit.header, kit.section
+    Chip, HoverTile = kit.Chip, kit.HoverTile
+
+    def kind_icon(check: Check, size: float) -> Widget:
+        """The item's own icon for items / crafts, otherwise a symbol."""
+        if check.kind in ("Items", "Crafting"):
+            item = check.mod_name.split(": ", 1)[-1]
+            if online_data.icon_png(item):
+                return icon_widget(item, size)
+        glyph = md_icon(_KIND_ICONS.get(check.kind, "star-four-points-outline"))
+        return Label(text=_ICON_FONT.format(glyph), markup=True, size_hint_x=None, width=size, font_size=sp(22),
+                     color=(0.75, 0.80, 0.86, 1))
+
+    # -- popups --------------------------------------------------------------
     def requirement_lines(requirements) -> str:
         if not requirements:
             return f"[color={_COLOURS[IN_LOGIC]}]{_ICON_FONT.format(_TICK)}  Nothing[/color]"
@@ -327,9 +431,6 @@ def make_tracker_view(ctx):
             mark = _ICON_FONT.format(_TICK if req.met else _CROSS)
             lines.append(f"[color={colour}]{mark}  {escape_markup(req.text)}[/color]")
         return "\n".join(lines)
-
-    def section(card, title: str):
-        card.add_widget(label(f"[b]{title}[/b]", style="Title", role="small"))
 
     def show_check_info(check: Check, view) -> None:
         info = online_data.check_info(check.mod_name, check.name, view.state, view.slot_data, view.recipe_slots)
@@ -431,75 +532,20 @@ def make_tracker_view(ctx):
         def on_release(self):
             self.view.select(self.tab)
 
-    class CheckTile(ButtonBehavior, HoverBehavior, MDBoxLayout):
-        """One check: icon, name, a status chip and a "details" chevron.
-        Lights up (with a hand cursor) under the mouse; click for the popup."""
+    class CheckTile(HoverTile):
+        """One check: icon, name, a status chip and a "details" chevron."""
 
         def __init__(self, check: Check, name: str, view, **kwargs):
-            super().__init__(orientation="horizontal", size_hint_y=None, height=dp(48),
-                             padding=(dp(14), dp(6), dp(10), dp(6)), spacing=dp(10), **kwargs)
-            self.check, self.view = check, view
-            self._hover_ready = False
-            Clock.schedule_once(lambda dt: setattr(self, "_hover_ready", True), 0.25)
-            colour = _STATUS_RGB[check.status]
-            with self.canvas.before:
-                self.bg = Color(1, 1, 1, 0.045)
-                self._bg = RoundedRectangle(radius=[dp(10)])
-                Color(*colour, 0.95 if check.status != CHECKED else 0.45)
-                self._bar = RoundedRectangle(radius=[dp(2)])
-            self.bind(pos=self._layout_bg, size=self._layout_bg)
-
-            self.add_widget(kind_icon(check, dp(32)))
             done = check.status == CHECKED
+            colour = _STATUS_RGB[check.status]
             text = escape_markup(name)
-            # Plain Kivy labels: KivyMD re-themes custom text colours on rebuilt widgets.
-            title = Label(text=f"[s]{text}[/s]" if done else text, markup=True, font_size=sp(16),
-                          shorten=True, shorten_from="right", halign="left", valign="middle",
-                          color=(0.62, 0.64, 0.67, 1) if done else (0.94, 0.95, 0.96, 1))
-            title.bind(size=lambda inst, size: setattr(inst, "text_size", size))
-            self.add_widget(title)
-            self.add_widget(Chip(_CHIP_TEXT[check.status], colour))
-            self.chevron = Label(text=_ICON_FONT.format(md_icon("chevron-right")), markup=True, size_hint_x=None,
-                                 width=dp(16), font_size=sp(18), color=(1, 1, 1, 0.35))
-            self.add_widget(self.chevron)
+            super().__init__(kind_icon(check, dp(32)), f"[s]{text}[/s]" if done else text, bar_rgb=colour,
+                             bar_alpha=0.45 if done else 0.95, chip=Chip(_CHIP_TEXT[check.status], colour),
+                             dimmed=done, **kwargs)
+            self.check, self.view = check, view
 
-        def _layout_bg(self, *_args):
-            self._bg.pos, self._bg.size = self.pos, self.size
-            self._bar.pos, self._bar.size = (self.x + dp(4), self.y + dp(9)), (dp(4), self.height - dp(18))
-
-        def on_enter(self, *_args):
-            # Freshly built tiles all sit at (0, 0) until laid out, so the
-            # mouse can "enter" every one of them at once: ignore hovers
-            # until the layout has settled.
-            if not self._hover_ready:
-                return
-            self.bg.a = 0.11
-            self.chevron.color = (1, 1, 1, 0.9)
-            Window.set_system_cursor("hand")
-
-        def on_leave(self, *_args):
-            self.bg.a = 0.045
-            self.chevron.color = (1, 1, 1, 0.35)
-            Window.set_system_cursor("arrow")
-
-        def on_release(self):
-            Window.set_system_cursor("arrow")
+        def on_click(self):
             show_check_info(self.check, self.view)
-
-    class Chip(Label):
-        """Small rounded status label."""
-
-        def __init__(self, text: str, rgb, **kwargs):
-            super().__init__(text=text, font_size=sp(12), halign="center", valign="middle",
-                             size_hint=(None, None), size=(dp(62), dp(22)), color=(*rgb, 1),
-                             pos_hint={"center_y": 0.5}, **kwargs)
-            with self.canvas.before:
-                Color(*rgb, 0.16)
-                self._rect = RoundedRectangle(radius=[dp(11)])
-            self.bind(pos=self._move, size=self._move)
-
-        def _move(self, *_args):
-            self._rect.pos, self._rect.size = self.pos, self.size
 
     class SectionHeader(MDBoxLayout):
         """Section title with a short coloured underline and its counts."""

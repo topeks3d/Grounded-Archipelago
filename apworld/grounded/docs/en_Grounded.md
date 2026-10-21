@@ -64,7 +64,11 @@ Depending on the "Goal" option:
   Client's Tracker tab to see the new costs.
 - Archipelago only runs in a world named **archipelago** (case doesn't
   matter). Received items wait until you've loaded that world and your
-  character has spawned, and checks from any other save are ignored. You can
+  character has spawned, and checks from any other save are ignored. In any
+  other world the mod switches itself off completely -- research, gold card
+  drop chances and recipes are the game's own -- and reminds you every 5
+  minutes that the world isn't the Archipelago one. Inside it, you're
+  reminded every 5 minutes while the Grounded Client isn't connected. You can
   change the name in the mod's `Scripts/config.lua` (`required_world_name`).
 - Items you receive and send, hints about your items, and DeathLinks pop up
   on screen (and in the UE4SS log).

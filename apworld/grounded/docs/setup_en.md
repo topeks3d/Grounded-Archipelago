@@ -45,8 +45,11 @@ usual Archipelago way.
 2. Type your server address in the client and connect with your slot name.
 3. In Grounded, create a new world named **archipelago** (any capitalization)
    and load it. Archipelago only runs in that world: received items wait until
-   you've spawned there, and checks from other saves are ignored. (The name can
-   be changed with `required_world_name` in the mod's `Scripts\config.lua`.)
+   you've spawned there, checks from other saves are ignored, and your other
+   worlds play like the normal game (an on-screen reminder says so every 5
+   minutes). While you're in it, a reminder also appears every 5 minutes if
+   the client isn't connected. (The name can be changed with
+   `required_world_name` in the mod's `Scripts\config.lua`.)
 4. Run Grounded in **Windowed** or **Borderless** display mode to see the
    notification cards the client draws over the game.
 

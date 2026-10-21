@@ -5,6 +5,9 @@
 
 local json = require("ap_json")
 
+-- The client rewrites client_heartbeat.json every few seconds while it runs.
+local HEARTBEAT_STALE_SECONDS = 20
+
 local function ensure_dir(path)
     local probe = path .. "/._ap_probe"
     local f = io.open(probe, "w")
@@ -212,9 +215,16 @@ function ipc:poll()
     end
     table.sort(new_items, function(a, b) return a.index < b.index end)
 
+    -- to_game.json is only rewritten on events, so its "connected" goes
+    -- stale when the client closes; the client's heartbeat says whether it
+    -- is actually running (and connected) right now.
+    local heartbeat = json.decode(read_file(self.dir .. "/client_heartbeat.json") or "") or {}
+    local alive = type(heartbeat.time) == "number" and math.abs(os.time() - heartbeat.time) < HEARTBEAT_STALE_SECONDS
+
     return {
         new_items = new_items,
         connected = data.connected or false,
+        client_connected = alive and heartbeat.connected == true,
         slot = data.slot,
         goal = data.goal,
         gold_card_drop_chance = data.gold_card_drop_chance or 0,

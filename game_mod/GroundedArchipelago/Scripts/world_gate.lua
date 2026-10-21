@@ -1,7 +1,8 @@
 -- world_gate.lua
 --
 -- "Is the player in the Archipelago world?" (On the main menu, grants
--- "succeed" against nothing and would be marked applied.) All of:
+-- "succeed" against nothing and would be marked applied; in any other
+-- world the whole mod stays out of the way.) All of:
 --   * ASurvivalGameState has a PlaythroughName (empty on the main menu),
 --   * it matches config.required_world_name (case-insensitive, trimmed;
 --     nil/"" accepts any world),
@@ -84,40 +85,43 @@ local function set_state(key, fmt, ...)
     end
 end
 
--- Returns in_world (bool), world_name (string or nil). Cheap enough to
--- call every poll tick.
+M.player_character_spawned = player_character_spawned
+
+-- Returns in_world (bool), world_name (string or nil), ap_world (bool: a
+-- world is loaded and its name is the Archipelago one -- true as soon as
+-- it starts loading, unlike in_world). Cheap enough to call every poll tick.
 function M.check(config)
     local world_name = M.read_world_name()
     if not world_name then
         in_world_since = nil
         set_state("menu", "Not in a world (main menu / loading) -- holding received items until one is loaded.")
-        return false, nil
+        return false, nil, false
     end
 
     local required = config.required_world_name
     if required and required ~= "" and normalize(world_name) ~= normalize(required) then
         in_world_since = nil
         set_state("wrong:" .. world_name,
-            "World '%s' is loaded, but Archipelago only runs in a world named '%s' -- received items are " ..
-            "held and checks are ignored. Create/rename a world to '%s' (or change " ..
+            "World '%s' is loaded, but Archipelago only runs in a world named '%s' -- the mod is off here " ..
+            "(vanilla game, received items held, checks ignored). Create/rename a world to '%s' (or change " ..
             "required_world_name in Scripts/config.lua).", world_name, required, required)
-        return false, world_name
+        return false, world_name, false
     end
 
     if not player_character_spawned() then
         in_world_since = nil
         set_state("nopawn:" .. world_name, "World '%s' loading -- waiting for the player to spawn.", world_name)
-        return false, world_name
+        return false, world_name, true
     end
 
     local now = os.time()
     in_world_since = in_world_since or now
     if os.difftime(now, in_world_since) * 1000 < (config.world_settle_ms or 0) then
-        return false, world_name
+        return false, world_name, true
     end
 
     set_state("in:" .. world_name, "In Archipelago world '%s' -- applying received items and sending checks.", world_name)
-    return true, world_name
+    return true, world_name, true
 end
 
 return M

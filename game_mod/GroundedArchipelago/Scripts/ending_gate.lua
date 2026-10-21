@@ -98,6 +98,9 @@ function M.register(ipc, register_hook_with_retry, config)
 end
 
 function M.on_game_won(ipc)
+    if not ipc.reporting_enabled then
+        return -- another world's ending: nothing to send or hold
+    end
     if not M.enabled or M.boss_defeated(ipc) then
         ipc:report_location(ENDING_LOCATION)
         return

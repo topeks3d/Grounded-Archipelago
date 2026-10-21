@@ -13,6 +13,10 @@
 --
 -- Data-table edits are per game process (reapplied each launch). Recipes a
 -- save already knows stay known -- use a fresh save for a new seed.
+--
+-- The stripping only happens in the Archipelago world. Every list and value
+-- it changes is remembered first, and put back when any other world loads,
+-- so other saves research the vanilla way.
 
 local M = {}
 
@@ -88,6 +92,80 @@ local function empty_array(array)
     return pcall(function() array:Empty() end)
 end
 
+-- ---------------------------------------------------------------------
+-- Vanilla values, for putting everything back outside the AP world
+-- ---------------------------------------------------------------------
+-- key -> {fetch = fn() -> TArray, entries = {{dt=, row=}, ...}} for emptied
+-- handle arrays; key -> {fetch = fn() -> object, field =, value =} for
+-- zeroed numbers. Arrays are re-found through `fetch` on restore rather
+-- than kept as userdata across ticks. The first recording of a key wins
+-- (that's the vanilla one).
+local saved_arrays = {}
+local saved_values = {}
+
+local function read_handle_entries(array)
+    local entries = {}
+    local len_ok, len = pcall(function() return #array end)
+    if not len_ok or type(len) ~= "number" then
+        return nil
+    end
+    for i = 1, len do
+        local ok, entry = pcall(function()
+            local handle = unwrap(array[i])
+            return {dt = handle.DataTable, row = to_text(handle.RowName)}
+        end)
+        if not ok or not entry.row then
+            return nil
+        end
+        entries[#entries + 1] = entry
+    end
+    return entries
+end
+
+-- Empties `array` after remembering its contents under `key`.
+local function strip_array(key, array, fetch)
+    if not saved_arrays[key] then
+        local entries = read_handle_entries(array)
+        if not entries then
+            return false
+        end
+        saved_arrays[key] = {fetch = fetch, entries = entries}
+    end
+    return empty_array(array)
+end
+
+local function zero_value(key, object, field, fetch)
+    if not saved_values[key] then
+        local ok, value = pcall(function() return object[field] end)
+        if not ok or type(value) ~= "number" then
+            return false
+        end
+        saved_values[key] = {fetch = fetch, field = field, value = value}
+    end
+    return pcall(function() object[field] = 0 end)
+end
+
+-- Refills an emptied array (UE4SS grows a TArray when writing one past
+-- its end). Read back, since a silent no-op would look like success.
+local function refill_array(array, entries)
+    if not empty_array(array) then
+        return false, "couldn't empty it first"
+    end
+    for i, entry in ipairs(entries) do
+        local ok, err = pcall(function()
+            array[i] = {DataTable = entry.dt, RowName = FName(entry.row)}
+        end)
+        if not ok then
+            return false, string.format("adding %s: %s", entry.row, tostring(err))
+        end
+    end
+    local len_ok, len = pcall(function() return #array end)
+    if not len_ok or len ~= #entries then
+        return false, string.format("%s of %d entries after refilling", tostring(len), #entries)
+    end
+    return true
+end
+
 local function get_global_table_data()
     local ok, global_data = pcall(objects.find_first, "GlobalTableData")
     if ok and global_data then
@@ -135,10 +213,16 @@ local function strip_item_unlocks(global_data, managed)
     end
     local research_cleared, pickup_cleared = 0, 0
     local ok = for_each_row(items_table, function(row_name, row)
+        local function fetch(field)
+            return function()
+                local data_table = get_table(get_global_table_data(), "AllItemsTable")
+                return unwrap(data_table:FindRow(row_name))[field]
+            end
+        end
         for _, field in ipairs({"ResearchUnlockRecipes", "NewResearchUnlockRecipes"}) do
             local arr_ok, arr = pcall(function() return row[field] end)
             if arr_ok and arr and #read_handle_array(arr) > 0 then
-                if empty_array(arr) then
+                if strip_array("item|" .. row_name .. "|" .. field, arr, fetch(field)) then
                     research_cleared = research_cleared + 1
                 end
             end
@@ -155,7 +239,7 @@ local function strip_item_unlocks(global_data, managed)
                     table.insert(keep, recipe)
                 end
             end
-            if has_managed and empty_array(pickup) then
+            if has_managed and strip_array("item|" .. row_name .. "|UnlockRecipes", pickup, fetch("UnlockRecipes")) then
                 pickup_cleared = pickup_cleared + 1
                 if #keep > 0 then
                     M.deferred_pickup_unlocks[row_name] = keep
@@ -178,17 +262,31 @@ local function strip_brainpower_unlocks()
     local stripped_any = false
     for _, asset in ipairs(assets) do
         local levels_ok, levels = pcall(function() return asset.ResearchLevels end)
-        if levels_ok and levels then
+        local name_ok, asset_name = pcall(function() return asset:GetFullName() end)
+        if levels_ok and levels and name_ok then
             local len_ok, len = pcall(function() return #levels end)
             if len_ok and type(len) == "number" and len > 0 then
+                local function find_asset()
+                    for _, candidate in ipairs(FindAllOf("GlobalItemData") or {}) do
+                        if candidate:GetFullName() == asset_name then
+                            return candidate
+                        end
+                    end
+                    error("GlobalItemData " .. asset_name .. " is gone")
+                end
                 for i = 1, len do
+                    local function find_level()
+                        return unwrap(find_asset().ResearchLevels[i])
+                    end
                     pcall(function()
                         local level = unwrap(levels[i])
-                        level.UnlockRecipes:Empty()
-                        level.BonusScienceAtLevel = 0
+                        local key = "brainpower|" .. asset_name .. "|" .. i
+                        strip_array(key .. "|UnlockRecipes", level.UnlockRecipes,
+                            function() return find_level().UnlockRecipes end)
+                        zero_value(key .. "|BonusScienceAtLevel", level, "BonusScienceAtLevel", find_level)
                     end)
                 end
-                pcall(function() asset.SciencePerResearch = 0 end)
+                zero_value("brainpower|" .. asset_name .. "|SciencePerResearch", asset, "SciencePerResearch", find_asset)
                 stripped_any = true
                 log("research_control: disabled recipe unlocks + bonus science on %d brainpower levels", len)
             end
@@ -214,7 +312,10 @@ local function strip_tech_tree_unlocks(global_data, managed)
             end
             for _, recipe in ipairs(read_handle_array(unlock_data)) do
                 if managed[recipe] then
-                    empty_array(unlock_data)
+                    strip_array("tech|" .. tree_name .. "|" .. node_name, unlock_data, function()
+                        local tree_row = unwrap(get_table(get_global_table_data(), "TechTreesTable"):FindRow(tree_name))
+                        return unwrap(unwrap(tree_row.TechTreeRecipesTable):FindRow(node_name)).UnlockData
+                    end)
                     log("research_control: BURG.L tech tree '%s' node '%s' sold AP-managed '%s' -- emptied",
                         tree_name, node_name, recipe)
                     return
@@ -400,12 +501,70 @@ local function max_brainpower()
     return true
 end
 
--- Every tick from main.lua; each step is a no-op once done. Per-save steps
--- only run inside the Archipelago world (`in_world`).
-function M.tick(config, in_world)
+-- ---------------------------------------------------------------------
+-- 4. Putting vanilla research back (any other world)
+-- ---------------------------------------------------------------------
+local restore_failed = false
+
+-- Returns true once everything stripped is back. On failure the rest
+-- stays stripped until the game restarts (logged and shown once).
+local function restore_unlock_sources()
+    if restore_failed or (not items_stripped and not brainpower_stripped) then
+        return true
+    end
+    local restored, problems = 0, {}
+    for key, saved in pairs(saved_arrays) do
+        local fetch_ok, array = pcall(saved.fetch)
+        local ok, err = false, array
+        if fetch_ok and array then
+            ok, err = refill_array(array, saved.entries)
+        end
+        if ok then
+            restored = restored + 1
+        else
+            problems[#problems + 1] = key .. ": " .. tostring(err)
+        end
+    end
+    for key, saved in pairs(saved_values) do
+        local ok, err = pcall(function() saved.fetch()[saved.field] = saved.value end)
+        if not ok then
+            problems[#problems + 1] = key .. ": " .. tostring(err)
+        end
+    end
+    stripped, items_stripped, brainpower_stripped = false, false, false
+    last_brainpower_attempt = nil
+    M.deferred_pickup_unlocks = {}
+    if #problems > 0 then
+        restore_failed = true
+        log("research_control: couldn't put vanilla research back (%d problems, e.g. %s) -- restart Grounded " ..
+            "before playing other worlds", #problems, problems[1])
+        pcall(function()
+            require("notifications").show_local(
+                "Archipelago: restart Grounded to get normal research back in this world")
+        end)
+        return false
+    end
+    log("research_control: vanilla research restored (%d lists) for a non-Archipelago world", restored)
+    return true
+end
+
+-- Every tick from main.lua; each step is a no-op once done.
+--   active: true in a world named for Archipelago (strip research), false
+--           in any other loaded world (put vanilla back), nil on the main
+--           menu (leave as is until a world loads).
+--   in_world: the Archipelago world is fully loaded (per-save steps).
+function M.tick(config, in_world, active)
     if config.disable_research == false then
         return
     end
+    if active == false then
+        restore_unlock_sources()
+        return
+    end
+    if active == nil then
+        return
+    end
+    restore_failed = false -- back in the AP world: a later restore may try again
     if not strip_unlock_sources_once() then
         return -- nothing else is safe until unlock sources are stripped
     end
