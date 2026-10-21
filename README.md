@@ -30,56 +30,110 @@ Entertainment, Xbox Game Studios, Microsoft or the Archipelago project.
   send and receive.
 - A **PopTracker** pack, and Universal Tracker support.
 
-## Requirements
+## Setup guide
 
-- Grounded on PC (Steam)
+### What you need
+
+- Grounded on PC ([Steam](https://store.steampowered.com/app/962130/Grounded/))
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) 0.6.7 or later
 - [UE4SS for Grounded](https://www.nexusmods.com/grounded/mods/198) (0R4X's
-  UE4SS package for Grounded)
+  Grounded-ready UE4SS package -- this mod was built and tested on it)
+- The latest `GroundedArchipelago-<version>.zip` from this repository's
+  [Releases](https://github.com/topeks3d/Grounded-Archipelago/releases). It
+  contains `grounded.apworld`, the `GroundedArchipelago` mod folder,
+  `grounded_poptracker.zip` (optional) and a copy of this guide (`SETUP.md`).
 
-## Installing
+### 1. Install the Archipelago world
 
-Download the latest `GroundedArchipelago-<version>.zip` from Releases and
-follow **SETUP.md** inside it (also at
-[apworld/grounded/docs/setup_en.md](apworld/grounded/docs/setup_en.md)). In
-short:
+Double-click `grounded.apworld` (Archipelago installs it), or copy it into
+Archipelago's `custom_worlds` folder (`C:\ProgramData\Archipelago\custom_worlds`
+for the Windows installer). Restart the Archipelago Launcher afterwards.
 
-1. Install `grounded.apworld` into Archipelago (double-click it, or put it in
-   `custom_worlds`).
-2. Install UE4SS for Grounded and copy the `GroundedArchipelago` folder into
-   `ue4ss\Mods`; in `mods.txt` enable GroundedArchipelago and
-   CheatManagerEnablerMod, and leave ConsoleEnablerMod off.
-3. Generate and host a game with a Grounded YAML.
-4. Start **Grounded Client** from the Archipelago Launcher, connect, then load
-   a Grounded world named **archipelago**.
+### 2. Install the game mod
+
+1. Install UE4SS for Grounded: extract it into
+   `Grounded\Maine\Binaries\Win64`, so `dwmapi.dll` and the `ue4ss` folder sit
+   next to `Maine-Win64-Shipping.exe`. (In Steam: right-click Grounded >
+   Manage > Browse local files to find the `Grounded` folder.)
+2. Copy the `GroundedArchipelago` folder into `ue4ss\Mods`, so you end up with
+   `...\Win64\ue4ss\Mods\GroundedArchipelago\Scripts\main.lua`.
+3. Open `ue4ss\Mods\mods.txt` and make sure it has these lines:
+
+   ```
+   CheatManagerEnablerMod : 1
+   ConsoleEnablerMod : 0
+   GroundedArchipelago : 1
+   BPModLoaderMod : 0
+   ```
+
+   Received items are granted through the game's own cheat commands, which
+   need **CheatManagerEnablerMod**. Leave **ConsoleEnablerMod** and
+   **BPModLoaderMod** off: they can crash Grounded on startup, and this mod
+   doesn't need them.
+4. Start Grounded once. `ue4ss\UE4SS.log` should now have lines starting with
+   `[GroundedArchipelago]`, including the IPC folder the mod uses.
+
+### 3. Generate and host a game
+
+Make a YAML for Grounded (Archipelago Launcher > **Generate Template
+Options**, then edit `Grounded.yaml`), put it in Archipelago's `Players`
+folder with everyone else's, and generate and host the multiworld the usual
+Archipelago way.
+
+### 4. Play
+
+1. Open the Archipelago Launcher and start **Grounded Client**. It finds the
+   mod's IPC folder by itself for a normal Steam install.
+2. Type your server address in the client and connect with your slot name.
+3. In Grounded, create a new world named **archipelago** (any capitalization)
+   and load it. Archipelago only runs in that world:
+   - received items arrive once you've spawned there;
+   - checks only count there -- every other save plays like the normal game,
+     and an on-screen reminder says so every 5 minutes;
+   - while you're in it, a reminder also appears every 5 minutes if the
+     client isn't connected.
+4. Run Grounded in **Windowed** or **Borderless** display mode to see the
+   notification cards the client draws over the game.
+
+Use a fresh **archipelago** world for each new multiworld: recipes a save has
+already learned stay learned.
+
+## The Grounded Client
+
+- **Tracker tab:** every check in your seed, by region, plus Weapons, Armor,
+  Meals and Utility crafts, bosses, molars and more. Green ("Ready") checks are
+  in logic, red ("Locked") ones aren't yet. Click a check for its icon, what it
+  needs, its recipe (your seed's shuffled one with Recipe Shuffle) and where to
+  find it (the creatures that drop it this seed with Creature Drop Shuffle).
+- **Map** (in the Tracker): every landmark, visited or not. The map image isn't
+  included in releases (see Credits & references); landmarks are still
+  tracked in the region tabs.
+- **Notification cards:** received and sent items, hints and DeathLinks pop up
+  over the game with the item, the player and the location.
+- **Commands:** `/overlay` (cards on/off -- off uses the game's own
+  notification feed), `/ipc_status` (where the client and mod exchange files),
+  `/override_save_binding` (see Troubleshooting), plus Archipelago's usual ones.
+
+## Other trackers
+
+- **PopTracker:** put `grounded_poptracker.zip` in PopTracker's `packs`
+  folder, open the pack, click the AP button and connect with your slot name.
+- **Universal Tracker** works with this world directly.
 
 ## How it works
 
-Two parts, talking through a folder of small JSON files:
+Two parts, talking through a folder of small JSON files (the mod's `ipc`
+folder):
 
 - `game_mod/GroundedArchipelago` -- a UE4SS Lua mod inside the game: detects
-  checks, grants received items, applies the recipe and drop shuffles.
+  checks, grants received items, and applies the research changes, gold card
+  drop chance and recipe/drop shuffles (only in the **archipelago** world).
 - `apworld/grounded` -- the Archipelago world (generation and logic) and the
   Grounded Client (server connection, Tracker, notification cards).
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for the details, [TESTING.md](TESTING.md)
-for the in-game test checklist and [DEV_NOTES.md](DEV_NOTES.md) for the
-history of how the game hooks were found.
-
-## Building from source
-
-- `python connector/tools/deploy.py` -- install the mod and apworld into your
-  local Grounded and Archipelago.
-- `python connector/tools/build_release.py` -- build
-  `dist/GroundedArchipelago-<version>.zip` (the version comes from
-  `apworld/grounded/archipelago.json`).
-- `python connector/tools/apply_location_review.py` -- apply
-  `location_review.txt` (which checks exist, their requirements, names and
-  regions).
-- `python connector/tools/fetch_online_data.py` -- refresh the bundled wiki
-  data (and, for your own use, the wand.com map). Needs Pillow.
-- Tests: copy `apworld/grounded` into an Archipelago checkout's `worlds/` and
-  run `python -m pytest worlds/grounded/test`.
+The world's tests are in `apworld/grounded/test`: copy `apworld/grounded` into
+an Archipelago source checkout's `worlds/` folder and run
+`python -m pytest worlds/grounded/test`.
 
 ## Credits & references
 
@@ -173,3 +227,39 @@ The code is released under the [MIT License](LICENSE), © 2026 topeks3d.
 This covers the project's own code only. The bundled wiki data
 (`recipes.json`, `sources.json`) stays under CC BY-SA 4.0, and Grounded's item
 art stays Microsoft's (see Credits & references above).
+
+## Troubleshooting
+
+Most problems show up in `Grounded\Maine\Binaries\Win64\ue4ss\UE4SS.log` --
+search it for `[GroundedArchipelago]`.
+
+- **No `[GroundedArchipelago]` lines in the log at all:** the mod isn't
+  loading. Check the folder is `ue4ss\Mods\GroundedArchipelago\Scripts\main.lua`
+  (not one folder deeper) and that `mods.txt` has `GroundedArchipelago : 1`.
+- **"Archipelago is off: this world isn't named 'archipelago'":** you're in a
+  different save. Create or load a world named **archipelago**. If you joined
+  someone else's game and the name doesn't come through, set
+  `config.required_world_name = nil` in the mod's `Scripts\config.lua`.
+- **"Not connected to the multiworld":** start the Grounded Client and connect.
+  If it's open and connected but the message keeps coming, check `/ipc_status`
+  in the client points at the same folder as the "Using IPC directory" line in
+  the UE4SS log.
+- **The client can't find the game:** for a non-standard install, start the
+  client with `--ipc-dir "<the IPC folder from the UE4SS log>"` (in the
+  Launcher, or `ArchipelagoLauncher.exe "Grounded Client" -- --ipc-dir "..."`).
+- **Items never arrive:** make sure `CheatManagerEnablerMod : 1` is in
+  `mods.txt`, and that you're in the **archipelago** world with your character
+  spawned (items wait while you're dead or on a loading screen).
+- **Checks aren't sent:** the client binds each multiworld to the first save it
+  sees, so progress from another save can't leak in. If you really changed
+  saves, or the server's address changed, type `/override_save_binding` in the
+  client while the right save is loaded.
+- **No notification cards over the game:** switch Grounded to Windowed or
+  Borderless, and check `/overlay` hasn't turned them off.
+- **"Restart Grounded to get normal research back in this world":** the mod
+  couldn't undo its research changes after you left the archipelago world.
+  Restart the game before playing your other saves.
+- **Grounded crashes on startup:** set `ConsoleEnablerMod` and `BPModLoaderMod`
+  to `: 0` in `mods.txt`.
+- **Still stuck:** open an issue on this repository with your `UE4SS.log` and
+  the Grounded Client's log (`Archipelago\logs\GroundedClient_*.txt`).

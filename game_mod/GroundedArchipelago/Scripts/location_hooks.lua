@@ -1009,13 +1009,12 @@ end
 -- "Creature death seen: <class>" in the log gives the class to use.
 local CREATURE_CLASS_TO_LOCATION = {
     -- From the BestiaryTable dump (BESTIARY_CREATURE lines: each bestiary
-    -- entry's creature Blueprint class) -- not yet confirmed by a real kill:
+    -- entry's creature Blueprint class), all confirmed by a real kill:
     ["BP_Spider_Boss_Hedge_C"] = "Kill: Hedge Broodmother",  -- BestiarySpiderBossBroodmother
     ["BP_Mant_C"] = "Kill: Mant",                             -- BestiaryMant
     ["BP_Mantis_C"] = "Kill: Mantis",                         -- BestiaryMantis
     ["BP_Ominent_Robot_C"] = "Kill: Director Schmector",      -- BestiarySchmector
     ["BP_Wicklow_C"] = "Kill: Wasp Queen",                    -- BestiaryWaspQueen
-    -- Confirmed by a kill:
     ["BP_Spider_BlackWidow_C"] = "Kill: Black Widow",
     -- Not its adds (BP_ArcR_BossAdd_C, BP_TazT_BossAdd_C).
     ["BP_ArcR_MKII_C"] = "Kill: Assistant Manager",          -- BestiaryArcRBoss
