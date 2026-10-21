@@ -39,7 +39,7 @@ Double click the apworld or drag it into your archipelago custom worlds folder.
    - **`PLEASE MAKE SURE YOU READ THEIR GUIDE FOR INSTALLING UE4SS `**
 
 3. Copy the `GroundedArchipelago` folder into the mods folder inside ue4ss.
-4. Open `ue4ss\Mods\mods.txt` and make sure that these mods are enabled:
+4. Open `ue4ss\Mods\mods.txt` and make sure that these mods are enabled (you will need to add the GroundedArchipelago line):
 
    ```
    CheatManagerEnablerMod : 1
@@ -62,7 +62,6 @@ If youre hosting, generate and host your multiworld the usual way following [the
 3. In Grounded, create a new world named **archipelago** (any capitalization)
    and load it. The mod will only run in worlds with that name.
    - You will be told if you are in an accepted world but aren't connected to a multiworld, and you will also be told if you aren't in a world with an accepted name.
-4. Run Grounded in **Windowed** or **Borderless** to see check popups in game. 
 
 Please remember to only play on fresh saves if you are starting a new multiworld.
 
