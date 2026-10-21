@@ -129,7 +129,7 @@ history of how the game hooks were found.
 **Design**
 - The notification cards drawn over the game follow the look of the Bloons TD 6
   Archipelago mod's notifications
-  ([Archipelago wiki page](https://archipelago.miraheze.org/wiki/Bloons_TD6)).
+  ([Matt's BTD6 mod](https://github.com/Matt41321/BloonsArchipelago)).
 
 **Research**
 - Item, creature, boss and location details were cross-checked against the
