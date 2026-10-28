@@ -32,7 +32,7 @@ a step later rather than earlier.
 """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Callable, Dict, Iterable, Tuple
+from typing import TYPE_CHECKING, Callable, Dict, FrozenSet, Iterable, NamedTuple, Tuple
 
 from worlds.generic.Rules import add_rule
 
@@ -45,8 +45,11 @@ from .items import JELLY_BUNDLE, JELLY_BUNDLE_COUNT
 from .itemsanity import ITEM_LOCATION_PREFIX
 from .killsanity import KILL_LOCATION_PREFIX
 from .location_renames import ap_name
-from .review_data import ITEM_NEEDS, LANDMARK_NEEDS
+from .review_data import ITEM_NEEDS, LANDMARK_NEEDS, LOCATION_BIOMES
 from .molars import MOLAR_LOCATION_PREFIX
+from .shop import SHOP_NODES, shop_location_name, shop_requirement
+from .player_upgrades import HEALTH_FOR_COMBAT_TIER
+from . import region_locks
 
 if TYPE_CHECKING:
     from BaseClasses import CollectionState
@@ -54,6 +57,65 @@ if TYPE_CHECKING:
     from . import GroundedWorld
 
 Rule = Callable[["CollectionState", int], bool]
+
+
+# ---------------------------------------------------------------------------
+# Per-player option switches the rules depend on. Rules only get (state,
+# player), so set_rules registers each player's settings here; the client's
+# Tracker registers its own from slot_data (settings_from_slot_data).
+# ---------------------------------------------------------------------------
+class RuleSettings(NamedTuple):
+    molar_upgrades: bool = False  # ProgressiveMolarUpgrades: fights need Max Health
+    region_locks: bool = False    # RegionLocks: Region Passes (region_locks.py)
+    # RecipeShuffle's ingredients, as ((recipe_row, (item_row, ...)), ...) --
+    # only used for which regions shuffled gear needs.
+    recipe_shuffle: Tuple[Tuple[str, Tuple[str, ...]], ...] = ()
+
+
+_SETTINGS: Dict[int, RuleSettings] = {}
+# RegionLocks: craftable name -> regions its ingredients need, per player.
+_CRAFT_REGIONS: Dict[int, Dict[str, FrozenSet[str]]] = {}
+
+
+def configure(player: int, settings: RuleSettings) -> None:
+    _SETTINGS[player] = settings
+    if settings.region_locks:
+        shuffle = {row: [(item, 1) for item in items] for row, items in settings.recipe_shuffle}
+        _CRAFT_REGIONS[player] = region_locks.craft_regions(shuffle)
+    else:
+        _CRAFT_REGIONS.pop(player, None)
+
+
+def _shuffle_key(recipe_shuffle) -> Tuple[Tuple[str, Tuple[str, ...]], ...]:
+    return tuple(sorted((row, tuple(entry[0] for entry in entries))
+                        for row, entries in (recipe_shuffle or {}).items()))
+
+
+def settings_from_slot_data(slot_data: dict) -> RuleSettings:
+    return RuleSettings(molar_upgrades=bool(slot_data.get("progressive_molar_upgrades")),
+                        region_locks=bool(slot_data.get("region_locks")),
+                        recipe_shuffle=_shuffle_key(slot_data.get("recipe_shuffle")))
+
+
+def has_regions(state: "CollectionState", player: int, regions: Iterable[str]) -> bool:
+    """RegionLocks: the passes for `regions` (always true with it off)."""
+    if not _SETTINGS.get(player, RuleSettings()).region_locks:
+        return True
+    return all(state.has(region_locks.pass_item(r), player) for r in regions)
+
+
+def usable(state: "CollectionState", player: int, name: str) -> bool:
+    """Has the recipe and, with RegionLocks, the regions its ingredients need."""
+    if not state.has(name, player):
+        return False
+    regions = _CRAFT_REGIONS.get(player)
+    return not regions or has_regions(state, player, regions.get(name, ()))
+
+
+def _has_any_usable(state: "CollectionState", player: int, names: Iterable[str]) -> bool:
+    if player not in _CRAFT_REGIONS:
+        return state.has_any(names, player)
+    return any(usable(state, player, name) for name in names)
 
 
 # ---------------------------------------------------------------------------
@@ -96,13 +158,13 @@ def has_all_jelly(state: "CollectionState", player: int) -> bool:
 
 
 def has_melee(state: "CollectionState", player: int, tier: int) -> bool:
-    if state.has_any(_MELEE[tier], player):
+    if _has_any_usable(state, player, _MELEE[tier]):
         return True
-    return tier == 3 and state.has_any(_NG_PLUS_MELEE, player) and has_all_jelly(state, player)
+    return tier == 3 and _has_any_usable(state, player, _NG_PLUS_MELEE) and has_all_jelly(state, player)
 
 
 def has_armor_tier(state: "CollectionState", player: int, tier: int) -> bool:
-    return all(state.has_any(_ARMOR[(tier, slot)], player) for slot in ("head", "chest", "legs"))
+    return all(_has_any_usable(state, player, _ARMOR[(tier, slot)]) for slot in ("head", "chest", "legs"))
 
 
 def can_fight(state: "CollectionState", player: int, tier: int) -> bool:
@@ -110,10 +172,12 @@ def can_fight(state: "CollectionState", player: int, tier: int) -> bool:
         return True
     if tier == 1:
         return has_melee(state, player, 1)
+    health = HEALTH_FOR_COMBAT_TIER.get(tier, 0) if _SETTINGS.get(player, RuleSettings()).molar_upgrades else 0
     return (
         can_fight(state, player, tier - 1)
         and has_melee(state, player, tier)
         and has_armor_tier(state, player, tier)
+        and (health == 0 or state.has("Progressive Max Health", player, health))
     )
 
 
@@ -121,7 +185,7 @@ def has_tool(state: "CollectionState", player: int, tool: str, min_tier: int) ->
     """A harvesting tool of at least min_tier that the player can actually
     craft (Tier N tools need Tier N-1 fights for their materials)."""
     return any(
-        state.has_any(names, player) and can_fight(state, player, fight)
+        _has_any_usable(state, player, names) and can_fight(state, player, fight)
         for (kind, t, fight), names in _TOOLS.items()
         if kind == tool and t >= min_tier
     )
@@ -149,7 +213,8 @@ def can_reach_upper_yard(state: "CollectionState", player: int) -> bool:
 
 
 def can_reach_undershed(state: "CollectionState", player: int) -> bool:
-    return can_reach_upper_yard(state, player) and can_fight(state, player, 3)
+    return (can_reach_upper_yard(state, player) and can_fight(state, player, 3)
+            and has_regions(state, player, region_locks.with_via(("Undershed",))))
 
 
 def ending_boss(excluded_bosses) -> str:
@@ -202,11 +267,30 @@ BOSS_REQUIREMENTS: Dict[str, Tuple[str, ...]] = {
 }
 
 
+def _region_rule(regions: Iterable[str]) -> Rule:
+    regions = region_locks.with_via(regions)
+    return lambda state, player: has_regions(state, player, regions)
+
+
+def _boss_tokens(boss: str) -> Tuple[str, ...]:
+    return BOSS_REQUIREMENTS[boss] + tuple("region:" + r for r in region_locks.BOSS_REGIONS.get(boss, ()))
+
+
 def _build_rule(tokens: Iterable[str]) -> Rule:
+    """Tokens (see the module docstring), plus "region:<Region>" (RegionLocks
+    pass, "region:*" = every pass) and "crafted:<name>" (the regions that
+    gear or consumable's ingredients need)."""
     rules = []
     for token in tokens:
         if token.startswith("kill:"):
-            rules.append(_build_rule(BOSS_REQUIREMENTS[token[5:]]))
+            rules.append(_build_rule(_boss_tokens(token[5:])))
+        elif token == "region:*":
+            rules.append(_region_rule(region_locks.LOCKED_REGIONS))
+        elif token.startswith("region:"):
+            rules.append(_region_rule((token[7:],)))
+        elif token.startswith("crafted:"):
+            rules.append(lambda state, player, name=token[8:]: has_regions(
+                state, player, _CRAFT_REGIONS.get(player, {}).get(name, ())))
         else:
             rules.append(_TOKEN_RULES[token])
     rules = tuple(rules)
@@ -368,14 +452,20 @@ def location_rules(excluded_bosses=(), shuffled_recipes=frozenset()) -> Dict[str
         if tokens:
             parts.setdefault(loc_name, []).append(_build_rule(tokens))
 
-    # Bosses
-    for boss, tokens in BOSS_REQUIREMENTS.items():
-        gate(KILL_LOCATION_PREFIX + boss, tokens)
-    gate("Defeat the Infected Broodmother", BOSS_REQUIREMENTS["Infected Broodmother"])
+    # Bosses (with RegionLocks, their arena's pass too)
+    for boss in BOSS_REQUIREMENTS:
+        gate(KILL_LOCATION_PREFIX + boss, _boss_tokens(boss))
+    gate("Defeat the Infected Broodmother", _boss_tokens("Infected Broodmother"))
 
     # The real ending: the whole story, then beating the final boss (see
     # ending_boss) -- the mod won't let the ending count before that kill.
     gate("Go Big Or Never Go Home (Ending)", ("undershed", "c3", "kill:" + ending_boss(excluded_bosses)))
+
+    # RegionLocks: Item / Landmark (and the few regional Craft) checks need
+    # the pass for the region location_review.txt files them under.
+    for loc_name, biome in LOCATION_BIOMES.items():
+        if biome in region_locks.LOCKED_REGIONS:
+            gate(loc_name, ("region:" + biome,))
 
     # Itemsanity
     for item_name, tokens in ITEM_REQUIREMENTS.items():
@@ -386,6 +476,7 @@ def location_rules(excluded_bosses=(), shuffled_recipes=frozenset()) -> Dict[str
         parts.setdefault(loc_name, []).append(
             lambda state, player, gate_item=gate_item: state.has(gate_item, player))
         gate(loc_name, _craft_requirement(loc_name[len(CRAFT_LOCATION_PREFIX):], shuffled_recipes))
+        gate(loc_name, ("crafted:" + gate_item,))
 
     # Mutation milestones
     for loc_name, tokens in MUTATION_REQUIREMENTS.items():
@@ -398,10 +489,18 @@ def location_rules(excluded_bosses=(), shuffled_recipes=frozenset()) -> Dict[str
     # Gold cards
     for row_name, tokens in GOLD_CARD_REQUIREMENTS.items():
         gate(GOLD_CARD_LOCATION_PREFIX + row_name, tokens)
+        # RegionLocks: past Tier 1, the creature could be anywhere.
+        if tuple(tokens) != ("c1",):
+            gate(GOLD_CARD_LOCATION_PREFIX + row_name, ("region:*",))
+
+    # BURG.L shop: priced in science, which takes more of the yard to find
+    for node in SHOP_NODES:
+        gate(shop_location_name(node), shop_requirement(node))
 
     # Molars
     for threshold in MOLAR_MILESTONES:
-        gate(MOLAR_LOCATION_PREFIX + str(threshold), _molar_requirement(threshold))
+        gate(MOLAR_LOCATION_PREFIX + str(threshold), _molar_requirement(threshold)
+             + tuple("region:" + r for r in region_locks.molar_regions(threshold)))
 
     def combine(rules):
         rules = tuple(rules)
@@ -412,6 +511,9 @@ def location_rules(excluded_bosses=(), shuffled_recipes=frozenset()) -> Dict[str
 
 def set_rules(world: "GroundedWorld") -> None:
     player = world.player
+    configure(player, RuleSettings(molar_upgrades=bool(world.options.progressive_molar_upgrades),
+                                   region_locks=bool(world.options.region_locks),
+                                   recipe_shuffle=_shuffle_key(world.recipe_ingredients)))
     all_rules = location_rules(world.options.excluded_bosses.value, frozenset(world.recipe_ingredients))
     for loc_name, rule in all_rules.items():
         if _has_location(world, loc_name):

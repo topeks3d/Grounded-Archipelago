@@ -162,6 +162,9 @@ class _Slot:
         self.photo = None
 
 
+COMPASS_W, COMPASS_H, COMPASS_TOP_FRACTION = 520, 34, 0.06
+
+
 class Overlay:
     def __init__(self, logo_png: Optional[bytes] = None):
         self.queue: "queue.Queue[Card]" = queue.Queue()
@@ -169,6 +172,10 @@ class Overlay:
         self.enabled = True
         self._thread: Optional[threading.Thread] = None
         self._stop = threading.Event()
+        # The compass line (compass.py), shown while not None. Independent of
+        # `enabled`, which is only about the notification cards.
+        self.compass_text: Optional[str] = None
+        self._compass_shown: Optional[str] = None
 
     # -- any thread ----------------------------------------------------------
     def start(self) -> None:
@@ -180,6 +187,11 @@ class Overlay:
         if self.enabled:
             self.start()
             self.queue.put(card)
+
+    def set_compass(self, text: Optional[str]) -> None:
+        if text is not None:
+            self.start()
+        self.compass_text = text
 
     def stop(self) -> None:
         self._stop.set()
@@ -200,17 +212,18 @@ class Overlay:
         }
         self._slots = [self._make_slot() for _ in range(MAX_VISIBLE)]
         self._order: list = []   # busy slots, top to bottom
+        self._compass = self._make_slot(COMPASS_W, COMPASS_H)
         self._tick()
         root.mainloop()
 
-    def _make_slot(self) -> _Slot:
+    def _make_slot(self, width: int = CARD_W, height: int = CARD_H) -> _Slot:
         tk = self._tk
         window = tk.Toplevel(self._root)
         window.overrideredirect(True)
         window.attributes("-topmost", True)
         window.attributes("-alpha", 0.0)
-        window.geometry(f"{CARD_W}x{CARD_H}+-4000+-4000")
-        canvas = tk.Canvas(window, width=CARD_W, height=CARD_H, bg=BG, highlightthickness=0, bd=0)
+        window.geometry(f"{width}x{height}+-4000+-4000")
+        canvas = tk.Canvas(window, width=width, height=height, bg=BG, highlightthickness=0, bd=0)
         canvas.pack()
         window.update_idletasks()
         hwnd = int(window.wm_frame(), 16)
@@ -227,8 +240,7 @@ class Overlay:
         except Exception:
             return None
 
-    def _anchor(self):
-        rect = _game_rect()
+    def _anchor(self, rect):
         if rect:
             left, top, width, height = rect
             return left + MARGIN_X, top + int(height * TOP_FRACTION)
@@ -265,12 +277,41 @@ class Overlay:
         slot.window.attributes("-alpha", 0.0)
         _move(slot.hwnd, -4000, -4000)
 
+    def _tick_compass(self, rect) -> None:
+        text = self.compass_text
+        slot = self._compass
+        if text != self._compass_shown:
+            self._compass_shown = text
+            slot.canvas.delete("all")
+            if text:
+                slot.canvas.create_rectangle(0, 0, 5, COMPASS_H, fill=COLOURS["hint"], width=0)
+                slot.canvas.create_text(COMPASS_W // 2, COMPASS_H // 2,
+                                        text=_fit("Nearest check: " + text, self._fonts["title"], COMPASS_W - 24),
+                                        fill=TEXT, font=self._fonts["title"])
+        if not text:
+            slot.window.attributes("-alpha", 0.0)
+            _move(slot.hwnd, -4000, -4000)
+            return
+        if rect:
+            left, top, width, height = rect
+            x, y = left + (width - COMPASS_W) // 2, top + int(height * COMPASS_TOP_FRACTION)
+        else:
+            x, y = (self._root.winfo_screenwidth() - COMPASS_W) // 2, int(
+                self._root.winfo_screenheight() * COMPASS_TOP_FRACTION)
+        slot.window.attributes("-alpha", ALPHA)
+        _move(slot.hwnd, x, y)
+
     def _tick(self) -> None:
         if self._stop.is_set():
             self._root.destroy()
             return
+        rect = _game_rect()
+        try:
+            self._tick_compass(rect)
+        except Exception:
+            pass
         now = time.monotonic()
-        anchor_x, anchor_y = self._anchor()
+        anchor_x, anchor_y = self._anchor(rect)
         # New cards, while a slot is free.
         free = [slot for slot in self._slots if not slot.busy]
         while free:

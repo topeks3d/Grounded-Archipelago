@@ -222,6 +222,36 @@ def _shuffled_recipe(gear_name: str, shuffle: dict, slots: dict) -> Optional[Rec
     return Recipe(station, materials, True)
 
 
+def _region_requirements(mod_name: str, state, slot_data: dict) -> List[Requirement]:
+    """RegionLocks: the passes a check needs (see region_locks.py)."""
+    from . import region_locks, rules
+    from .review_data import LOCATION_BIOMES
+
+    if not slot_data.get("region_locks"):
+        return []
+    regions: set = set()
+    biome = LOCATION_BIOMES.get(mod_name)
+    if biome in region_locks.LOCKED_REGIONS:
+        regions |= region_locks.with_via((biome,))
+    if mod_name.startswith(CRAFT_LOCATION_PREFIX):
+        gate = CRAFTSANITY_LOCATION_TO_GATE_ITEM.get(mod_name, "")
+        regions |= rules._CRAFT_REGIONS.get(1, {}).get(gate, frozenset())
+    if mod_name.startswith("Kill: "):
+        regions |= region_locks.with_via(region_locks.BOSS_REGIONS.get(mod_name[len("Kill: "):], ()))
+    return [Requirement(region_locks.pass_item(r), bool(state.has(region_locks.pass_item(r), 1)))
+            for r in sorted(regions)]
+
+
+def _scale_recipe(recipe: Recipe, percent: int) -> Recipe:
+    """RecipeCostMultiplier, the way recipe_shuffle.lua applies it: round to
+    nearest, never below 1."""
+    if percent == 100:
+        return recipe
+    materials = [(name, max(1, int(count * percent / 100 + 0.5)) if isinstance(count, int) else count)
+                 for name, count in recipe.materials]
+    return recipe._replace(materials=materials)
+
+
 def check_info(mod_name: str, ap_name: str, state, slot_data: Optional[dict] = None,
                recipe_slots: Optional[dict] = None) -> CheckInfo:
     """Everything the info popup shows for one check. `state` is anything
@@ -232,6 +262,7 @@ def check_info(mod_name: str, ap_name: str, state, slot_data: Optional[dict] = N
     shuffle = slot_data.get("recipe_shuffle") or {}
     tokens = _tokens_for(mod_name, frozenset(shuffle))
     requirements = [Requirement(token_text(t), bool(rules._build_rule((t,))(state, 1))) for t in tokens]
+    requirements += _region_requirements(mod_name, state, slot_data)
 
     kind, item, note = "Other", ap_name, ""
     recipes: List[Recipe] = []
@@ -252,6 +283,10 @@ def check_info(mod_name: str, ap_name: str, state, slot_data: Optional[dict] = N
         else:
             recipes = [Recipe(r["station"], [tuple(m) for m in r["materials"]], False) for r in vanilla_recipes(item)]
             note = "Craft it once to send the check."
+        percent = int(slot_data.get("recipe_cost_multiplier") or 100)
+        if percent != 100:
+            recipes = [_scale_recipe(recipe, percent) for recipe in recipes]
+            note += f" Costs are x{percent}% (Recipe Cost Multiplier)."
     elif mod_name.startswith(LANDMARK_PREFIX):
         kind = "Landmark"
         pin = landmark_pins().get(mod_name[len(LANDMARK_PREFIX):])

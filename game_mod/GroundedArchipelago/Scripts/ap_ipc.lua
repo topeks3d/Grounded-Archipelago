@@ -74,6 +74,8 @@ function ipc.new(dir)
     -- Local deaths reported to the client for DeathLink (in memory only --
     -- the client treats a lower value as a restart). See deathlink.lua.
     self.death_seq = 0
+    local data_ok, ap_data = pcall(require, "ap_data")
+    self.mod_version = data_ok and ap_data.VERSION or nil
 
     self:_load_state()
 
@@ -208,10 +210,12 @@ function ipc:poll()
     self:_sync_room(data)
 
     local new_items = {}
+    local item_counts = {} -- name -> copies received so far (applied or not)
     for _, entry in ipairs(data.received_items or {}) do
         if entry.index > self.applied_item_index then
             new_items[#new_items + 1] = entry
         end
+        item_counts[entry.name] = (item_counts[entry.name] or 0) + 1
     end
     table.sort(new_items, function(a, b) return a.index < b.index end)
 
@@ -223,6 +227,9 @@ function ipc:poll()
 
     return {
         new_items = new_items,
+        item_counts = item_counts,
+        received_items = data.received_items or {},
+        resync_seq = data.resync_seq or 0,
         connected = data.connected or false,
         client_connected = alive and heartbeat.connected == true,
         slot = data.slot,
@@ -232,6 +239,12 @@ function ipc:poll()
         start_with_tier1_recipes = data.start_with_tier1_recipes,
         excluded_bosses = data.excluded_bosses or {},
         recipe_shuffle = data.recipe_shuffle or {},
+        recipe_cost_multiplier = data.recipe_cost_multiplier or 100,
+        progressive_molar_upgrades = data.progressive_molar_upgrades == true,
+        gear_perks = data.gear_perks or 0,
+        compass = data.compass == true,
+        region_locks = data.region_locks == true,
+        shop_checks = data.shop_checks == true,
         creature_drop_shuffle = data.creature_drop_shuffle or {},
         notifications = data.notifications or {},
         death_link = data.death_link or false,
@@ -378,6 +391,8 @@ function ipc:_flush_from_game()
         world_code = self.world_code,
         recipe_slots = self.recipe_slots,
         death_seq = self.death_seq,
+        -- The client warns if this isn't its apworld's version.
+        mod_version = self.mod_version,
     })
     -- main.lua calls this every poll tick; only touch the disk when
     -- something actually changed (a write+rename every second on the game

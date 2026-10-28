@@ -57,6 +57,15 @@ def _read_json(path: Path):
         return None
 
 
+def _world_version() -> str:
+    """archipelago.json's world_version (works from a zipped .apworld too)."""
+    import pkgutil
+    try:
+        return json.loads(pkgutil.get_data(__package__, "archipelago.json"))["world_version"]
+    except Exception:
+        return ""
+
+
 def _build_context_class():
     # Built lazily: importing the apworld mustn't import CommonClient/kvui.
     from CommonClient import ClientCommandProcessor, CommonContext, logger
@@ -80,6 +89,36 @@ def _build_context_class():
             self.ctx.write_to_game()
             logger.info("Overlay notifications " + ("on." if self.ctx.overlay.enabled else
                                                      "off -- messages show in the game's HUD instead."))
+
+        def _cmd_compass(self):
+            """Turn the nearest-unchecked-landmark compass over the game on or off."""
+            if not isinstance(self.ctx, GroundedContext):
+                return
+            self.ctx.set_compass(not self.ctx.compass_enabled)
+            logger.info(f"Compass {'on' if self.ctx.compass_enabled else 'off'} "
+                        f"(radius {self.ctx.compass_radius} m; change it with /compass_radius).")
+
+        def _cmd_compass_radius(self, metres: str = ""):
+            """Only show landmark checks within this many metres (20-400) on the compass."""
+            if not isinstance(self.ctx, GroundedContext):
+                return
+            try:
+                self.ctx.set_compass(self.ctx.compass_enabled, int(metres))
+            except ValueError:
+                logger.info(f"Compass radius is {self.ctx.compass_radius} m -- use e.g. /compass_radius 150")
+                return
+            logger.info(f"Compass radius set to {self.ctx.compass_radius} m.")
+
+        def _cmd_resync(self):
+            """Re-send every check from the game and have the mod re-apply every recipe/station unlock received."""
+            if not isinstance(self.ctx, GroundedContext):
+                return
+            self.ctx.sent_location_names = set()
+            self.ctx.resync_seq += 1
+            self.ctx.sync_report_pending = True
+            self.ctx.write_to_game()
+            logger.info("Resyncing: every check the game has is being re-sent, and the mod will re-apply your "
+                        "unlocks once you're in the Archipelago world (bundles aren't handed out twice).")
 
         def _cmd_override_save_binding(self):
             """Bind this server address to the save that's loaded now (e.g. after the server's port changed)."""
@@ -138,15 +177,54 @@ def _build_context_class():
             self.death_link_message = ""
             self.last_game_death_seq: int | None = None
             self.room_seed_name: str | None = None
+            # Safety net: /resync bumps resync_seq (the mod re-applies unlocks);
+            # after a (re)connect the first sync is summarized in the log;
+            # a mod from another version is warned about once.
+            self.resync_seq = 0
+            self.sync_report_pending = False
+            self.version_warned = False
             # Overlay cards (overlay.py); /overlay toggles, saved in client_settings.json.
             from .online_data import logo_png
             from .overlay import Overlay
             self.settings_path = ipc_dir / "client_settings.json"
             self.overlay = Overlay(logo_png())
-            self.overlay.enabled = bool((_read_json(self.settings_path) or {}).get("overlay", True))
+            settings = _read_json(self.settings_path) or {}
+            self.overlay.enabled = bool(settings.get("overlay", True))
+            # Nearest-unchecked compass (compass.py): off unless turned on.
+            from .compass import DEFAULT_RADIUS_M
+            self.compass_enabled = bool(settings.get("compass", False))
+            self.compass_radius = int(settings.get("compass_radius", DEFAULT_RADIUS_M))
 
         def save_client_settings(self) -> None:
-            _write_json_atomic(self.settings_path, {"overlay": self.overlay.enabled})
+            _write_json_atomic(self.settings_path, {"overlay": self.overlay.enabled, "compass": self.compass_enabled,
+                                                    "compass_radius": self.compass_radius})
+
+        def set_compass(self, enabled: bool, radius: int | None = None) -> None:
+            from .compass import MAX_RADIUS_M, MIN_RADIUS_M
+            self.compass_enabled = enabled
+            if radius is not None:
+                self.compass_radius = max(MIN_RADIUS_M, min(MAX_RADIUS_M, int(radius)))
+            self.save_client_settings()
+            self.write_to_game()
+            self.update_compass()
+
+        def update_compass(self) -> None:
+            """Every second: the compass line for the overlay (None hides it)."""
+            from .compass import describe
+            text = None
+            if self.compass_enabled and self._is_connected() and (self.slot_data or {}).get("landmark_checks"):
+                pose = _read_json(self.ipc_dir / "compass.json") or {}
+                fresh = isinstance(pose.get("time"), (int, float)) and abs(time.time() - pose["time"]) < 5
+                positions = _read_json(self.ipc_dir / "landmark_positions.json") or {}
+                wanted = {}
+                for loc_id in self.missing_locations:
+                    mod_name = LOCATION_ID_TO_MOD_NAME.get(loc_id, "")
+                    if mod_name.startswith("Landmark: "):
+                        shown = LOCATION_ID_TO_NAME.get(loc_id, mod_name)
+                        wanted[mod_name[len("Landmark: "):]] = shown.removeprefix("Landmark: ")
+                if fresh and isinstance(positions, dict):
+                    text = describe(pose, positions, wanted, self.compass_radius)
+            self.overlay.set_compass(text)
 
         async def server_auth(self, password_requested: bool = False):
             if password_requested and not self.password:
@@ -164,6 +242,7 @@ def _build_context_class():
                 asyncio.create_task(self.update_death_link(bool(self.slot_data.get("death_link"))))
                 # Re-send everything after a (re)connect; the server ignores repeats.
                 self.sent_location_names = set()
+                self.sync_report_pending = True
                 self.write_to_game()
             elif cmd in ("ReceivedItems", "RoomUpdate"):
                 self.write_to_game()
@@ -306,11 +385,19 @@ def _build_context_class():
                 "gold_card_goal_amount": (self.slot_data or {}).get("gold_card_goal_amount", 65),
                 "start_with_tier1_recipes": (self.slot_data or {}).get("start_with_tier1_recipes", False),
                 "recipe_shuffle": (self.slot_data or {}).get("recipe_shuffle", {}),
+                "recipe_cost_multiplier": (self.slot_data or {}).get("recipe_cost_multiplier", 100),
+                "progressive_molar_upgrades": bool((self.slot_data or {}).get("progressive_molar_upgrades")),
+                "gear_perks": (self.slot_data or {}).get("gear_perks", 0),
+                "region_locks": bool((self.slot_data or {}).get("region_locks")),
+                "shop_checks": bool((self.slot_data or {}).get("shop_checks")),
                 "creature_drop_shuffle": (self.slot_data or {}).get("creature_drop_shuffle", {}),
                 "room_key": self._room_key(),
                 "death_link": bool((self.slot_data or {}).get("death_link")),
                 "death_link_seq": self.death_link_seq,
                 "death_link_message": self.death_link_message,
+                "resync_seq": self.resync_seq,
+                # The mod only writes compass.json while this is on.
+                "compass": self.compass_enabled,
                 "notifications": self.notifications,
                 # The client shows AP messages as overlay cards (overlay.py),
                 # so the mod keeps them out of the game's HUD.
@@ -382,6 +469,7 @@ def _build_context_class():
             if not data:
                 return
 
+            self._check_mod_version(data.get("mod_version"))
             can_send_checks = self._check_save_binding(
                 data.get("world_name"), data.get("world_code")
             )
@@ -410,6 +498,12 @@ def _build_context_class():
                 if ids:
                     await self.send_msgs([{"cmd": "LocationChecks", "locations": list(ids)}])
                 self.sent_location_names |= new_names
+                if self.sync_report_pending:
+                    newly = len(ids - set(self.checked_locations))
+                    logger.info(f"Synced with the server: {len(ids)} check(s) from your save sent "
+                                f"({newly} new to the server), {len(self.items_received)} item(s) received.")
+            if self.sync_report_pending and can_send_checks:
+                self.sync_report_pending = False
 
             await self._handle_local_death(data.get("death_seq"))
 
@@ -418,6 +512,16 @@ def _build_context_class():
                 self.goal_complete_sent = True
                 await self.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                 logger.info("Goal complete!")
+
+        def _check_mod_version(self, mod_version) -> None:
+            own = _world_version()
+            if self.version_warned or not mod_version or not own or mod_version == own:
+                return
+            self.version_warned = True
+            logger.warning(f"The Grounded mod is version {mod_version}, but this client/apworld is {own}. "
+                           f"Install the matching versions of both, or items and checks may go missing.")
+            self._card("deathlink", "Mod and apworld versions differ", f"mod {mod_version}, apworld {own}",
+                       tag=False)
 
         async def _handle_local_death(self, death_seq) -> None:
             if not isinstance(death_seq, int):
@@ -507,6 +611,10 @@ async def _ipc_sync_task(ctx) -> None:
             await ctx.read_from_game_and_act()
         except Exception:
             logger.exception("Error while syncing from the game mod")
+        try:
+            ctx.update_compass()
+        except Exception:
+            logger.exception("Error while updating the compass")
         # to_game.json only changes on events, so the mod can't tell from it
         # whether the client is still running: this file says so.
         if time.monotonic() - last_heartbeat >= HEARTBEAT_SECONDS:

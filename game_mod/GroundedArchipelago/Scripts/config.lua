@@ -28,6 +28,11 @@ config.test_mode = {
     overrides = {
         creature_drop_shuffle = nil, -- true / false
         recipe_shuffle = nil,        -- true / false
+        recipe_cost_multiplier = nil, -- 50-300 (percent)
+        progressive_molar_upgrades = nil, -- true / false (tiers follow received copies)
+        gear_perks = nil,            -- 0 off, 1 weapons, 2 weapons and armor
+        region_locks = nil,          -- true / false (passes follow received items)
+        shop_checks = nil,           -- true / false
         gold_card_drop_chance = nil, -- 0-50 (50 = 100%)
         gold_card_goal_amount = nil, -- 1-65
         goal = nil,                  -- 0 embiggening, 1 boss_only, 2 infected_broodmother,

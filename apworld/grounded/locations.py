@@ -4,7 +4,8 @@ Location definitions: region -> [(mod location name, offset)].
 IDs are BASE_ID + offset and come from list order within each range -- only
 append to the source lists. Offset ranges: 1000 itemsanity, 1500 killsanity,
 1800 craftsanity, 2000 gold cards, 2200 molars, 2800 mutations, 3000
-landmarks. 2400+ is retired (old exploration checks) -- don't reuse.
+landmarks, 3500 BURG.L shop (shop_data.py's offsets). 2400+ is retired (old
+exploration checks) -- don't reuse.
 """
 from __future__ import annotations
 
@@ -17,6 +18,7 @@ from .goldcards import gold_card_location_names
 from .molars import molar_location_names
 from .mutations import mutation_location_names
 from .landmarks import landmark_location_names
+from .shop import SHOP_ID_OFFSET, SHOP_NODES, shop_location_name
 from .location_renames import ap_name
 
 BASE_ID = 9411000 + 1000  # clear of the item id range
@@ -64,6 +66,10 @@ locations_by_region["Mutations"] = [
 
 locations_by_region["Landmarks"] = [
     (name, 3000 + i) for i, name in enumerate(landmark_location_names)
+]
+
+locations_by_region["BURG.L Shop"] = [
+    (shop_location_name(node), SHOP_ID_OFFSET + node.offset) for node in SHOP_NODES
 ]
 
 # (name, region_name, item_name) -- id-less locations with a locked item.

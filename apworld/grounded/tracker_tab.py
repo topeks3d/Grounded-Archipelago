@@ -30,6 +30,7 @@ _KIND_GROUPS: Tuple[Tuple[str, Tuple[str, ...]], ...] = (
     ("Gold Cards", ("Gold Card: ",)),
     ("Molars", ("Molars: ",)),
     ("Mutations", ("Mutations: ",)),
+    ("BURG.L Shop", ("BURG.L Shop: ",)),
 )
 OTHER_GROUPS: List[str] = [name for name, _ in _KIND_GROUPS] + ["Other"]
 GROUP_ORDER: List[str] = list(REGIONS) + list(CRAFT_GROUPS) + OTHER_GROUPS
@@ -39,11 +40,14 @@ _KINDS: Tuple[Tuple[str, str], ...] = (
     ("Item: ", "Items"), ("Craft: ", "Crafting"), (LANDMARK_PREFIX, "Landmarks"),
     ("Kill: ", "Bosses"), ("Defeat ", "Bosses"), ("Go Big", "Bosses"),
     ("Gold Card: ", "Gold Cards"), ("Molars: ", "Molars"), ("Mutations: ", "Mutations"),
+    ("BURG.L Shop: ", "Shop"),
 )
-KIND_ORDER: List[str] = ["Items", "Crafting", "Landmarks", "Bosses", "Gold Cards", "Molars", "Mutations", "Other"]
+KIND_ORDER: List[str] = ["Items", "Crafting", "Landmarks", "Bosses", "Gold Cards", "Molars", "Mutations", "Shop",
+                         "Other"]
 # Name prefixes left out under their own section heading.
 _SECTION_PREFIXES: Dict[str, Tuple[str, ...]] = {
     "Items": ("Item: ",), "Crafting": ("Craft: ", "Cook: "), "Landmarks": (LANDMARK_PREFIX,),
+    "Shop": ("BURG.L Shop: ",),
 }
 
 
@@ -113,10 +117,13 @@ _rules_cache: Dict[tuple, dict] = {}
 
 
 def _rules_for(slot_data: dict) -> dict:
-    from .rules import location_rules
+    from .rules import configure, location_rules, settings_from_slot_data
 
+    # The Tracker evaluates rules as player 1 (see _in_logic).
+    settings = settings_from_slot_data(slot_data)
+    configure(1, settings)
     key = (tuple(sorted(slot_data.get("excluded_bosses") or ())),
-           tuple(sorted(slot_data.get("recipe_shuffle") or {})))
+           tuple(sorted(slot_data.get("recipe_shuffle") or {})), settings)
     if key not in _rules_cache:
         _rules_cache.clear()
         _rules_cache[key] = location_rules(set(key[0]), frozenset(key[1]))
@@ -396,6 +403,7 @@ def make_tracker_view(ctx):
     from kivy.uix.relativelayout import RelativeLayout
     from kivy.uix.scatter import Scatter
     from kivy.uix.scrollview import ScrollView
+    from kivy.uix.slider import Slider
     from kivy.uix.stencilview import StencilView
     from kivy.uix.widget import Widget
     from kivy.utils import escape_markup
@@ -707,6 +715,7 @@ def make_tracker_view(ctx):
             self.hide_button = self._toggle_button("Hide done", "hide_checked", bar)
             self.logic_button = self._toggle_button("Ready only", "logic_only", bar)
             right.add_widget(bar)
+            right.add_widget(self._compass_row())
             self.summary = label("")
             right.add_widget(self.summary)
             self.content = MDBoxLayout(orientation="vertical")
@@ -743,6 +752,43 @@ def make_tracker_view(ctx):
             button.bind(on_release=toggle)
             parent.add_widget(button)
             return button
+
+        def _compass_row(self):
+            """Compass on/off and its radius (client.py's set_compass)."""
+            from .compass import MAX_RADIUS_M, MIN_RADIUS_M
+
+            row = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(36), spacing=dp(8))
+            caption_widget = MDButtonText(markup=True)
+            toggle = MDButton(caption_widget, style="outlined", size_hint_x=None, width=dp(150))
+            radius_label = label("", size_hint_x=None, width=dp(320))
+
+            def refresh_caption():
+                on = getattr(ctx, "compass_enabled", False)
+                box = md_icon("checkbox-marked" if on else "checkbox-blank-outline")
+                caption_widget.text = f"{_ICON_FONT.format(box)}  Compass"
+                radius_label.text = (f"[size=13sp]nearest unchecked landmark within "
+                                     f"[b]{getattr(ctx, 'compass_radius', 0)} m[/b][/size]")
+
+            def flip(*_args):
+                ctx.set_compass(not ctx.compass_enabled)
+                refresh_caption()
+
+            slider = Slider(min=MIN_RADIUS_M, max=MAX_RADIUS_M, step=10,
+                            value=getattr(ctx, "compass_radius", MIN_RADIUS_M))
+
+            def moved(_slider, value):
+                ctx.compass_radius = int(value)
+                refresh_caption()
+
+            # Saved (and sent to the mod) when the slider is let go, not per step.
+            slider.bind(value=moved, on_touch_up=lambda inst, touch: inst.collide_point(*touch.pos)
+                        and ctx.set_compass(ctx.compass_enabled, int(inst.value)))
+            toggle.bind(on_release=flip)
+            refresh_caption()
+            row.add_widget(toggle)
+            row.add_widget(radius_label)
+            row.add_widget(slider)
+            return row
 
         # -- data -----------------------------------------------------------
         def _inputs(self):

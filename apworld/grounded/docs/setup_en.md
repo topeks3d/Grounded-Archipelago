@@ -63,8 +63,20 @@ usual Archipelago way.
 - **Notification cards:** received and sent items, hints and DeathLinks pop up
   over the game with the item, the player and the location. `/overlay` turns
   them off (the game's own notification feed is used instead).
-- Commands: `/overlay`, `/ipc_status` (where the client and mod exchange
-  files), `/override_save_binding` (see below), plus Archipelago's usual ones.
+- **Compass** (off by default; the checkbox and slider at the top of the
+  Tracker tab, or `/compass` and `/compass_radius <metres>`): a line over the
+  game naming the nearest landmark check you haven't done yet within that
+  radius, how far it is and which way relative to where you're facing. Needs
+  Landmark Checks on; landmarks are found as the yard loads in around you, so
+  it learns their positions as you explore.
+- **After every (re)connect** the client re-sends every check your save has
+  and says so in the log. `/resync` does that again and has the mod re-apply
+  every recipe and station unlock you've received (bundles, science and other
+  one-off items aren't handed out twice). The client also warns if the mod
+  and the apworld are different versions.
+- Commands: `/overlay`, `/compass`, `/compass_radius`, `/resync`, `/ipc_status`
+  (where the client and mod exchange files), `/override_save_binding` (see
+  below), plus Archipelago's usual ones.
 
 ## Other trackers
 
@@ -83,6 +95,7 @@ usual Archipelago way.
 - **No notification cards:** switch Grounded to Windowed or Borderless, and
   check `/overlay` hasn't turned them off.
 - **Items never arrive:** make sure `CheatManagerEnablerMod : 1` is in
-  `mods.txt` (step 2.3).
+  `mods.txt` (step 2.3). If some arrived but the save lost them (e.g. a crash
+  before the game saved), type `/resync`.
 - **Grounded crashes on startup:** set `ConsoleEnablerMod` and `BPModLoaderMod`
   to `: 0` in `mods.txt`.

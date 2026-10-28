@@ -13,6 +13,8 @@ from BaseClasses import ItemClassification as IC
 
 from .consumables import CONSUMABLES
 from .gear import GEAR, PROGRESSIVE_LINES
+from .player_upgrades import MOLAR_UPGRADES
+from .region_locks import PASS_ITEMS
 
 BASE_ID = 9411000
 
@@ -67,6 +69,18 @@ progressive_items: Dict[str, ItemData] = {
     for i, name in enumerate(PROGRESSIVE_LINES)
 }
 
+# ProgressiveMolarUpgrades (player_upgrades.py):
+# count=0 here; create_items adds them when their option is on.
+player_upgrade_items: Dict[str, ItemData] = {
+    name: ItemData(300 + i, IC.progression, ItemType.gear, count=0)
+    for i, name in enumerate(MOLAR_UPGRADES)
+}
+
+# RegionLocks (region_locks.py): count=0 here; create_items adds them.
+region_pass_items: Dict[str, ItemData] = {
+    name: ItemData(310 + i, IC.progression, ItemType.gear, count=0) for i, name in enumerate(PASS_ITEMS)
+}
+
 story_items: Dict[str, ItemData] = {}
 
 # Filler (item_grants.lua grants them). Raw Science goes through AddScience,
@@ -115,6 +129,8 @@ item_table: Dict[str, ItemData] = {
     **gear_recipe_items,
     **consumable_items,
     **progressive_items,
+    **player_upgrade_items,
+    **region_pass_items,
     **story_items,
     **filler_items,
     **special_items,
@@ -134,6 +150,8 @@ item_name_groups: Dict[str, Set[str]] = {
     "Armor": {g.name for g in GEAR if g.kind == "armor"},
     "Filler": set(filler_items.keys()),
     "Progressive Gear": set(progressive_items.keys()),
+    "Player Upgrades": set(player_upgrade_items.keys()),
+    "Region Passes": set(region_pass_items.keys()),
 }
 
 # Random filler only -- the jelly bundles are a fixed, logic-relevant count.

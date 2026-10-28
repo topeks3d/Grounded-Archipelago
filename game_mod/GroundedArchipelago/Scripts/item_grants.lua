@@ -549,6 +549,16 @@ for item_name, consumable in pairs(CONSUMABLES) do
     grant_table[item_name] = function() return unlock_recipe_rows(consumable.recipes) end
 end
 
+-- ProgressiveMolarUpgrades: player_upgrades.lua keeps
+-- the player in step with the copies received, so arriving is enough.
+for item_name in pairs(require("ap_data").MOLAR_UPGRADES or {}) do
+    grant_table[item_name] = function() return true end
+end
+-- RegionLocks: region_locks.lua reads the passes from the item counts.
+for item_name in pairs(require("ap_data").REGION_PASSES or {}) do
+    grant_table[item_name] = function() return true end
+end
+
 -- ProgressiveGear: the Nth copy unlocks the first N recipes of its line
 -- (UnlockRecipe is idempotent; lines come from ap_data.lua).
 local PROGRESSIVE_LINES = require("ap_data").PROGRESSIVE_LINES
@@ -645,6 +655,20 @@ function M.get_managed_building_rows()
         end
     end
     return rows
+end
+
+-- ---------------------------------------------------------------------
+-- Safety net (safety_net.lua)
+-- ---------------------------------------------------------------------
+-- True if applying the item again changes nothing (an unlock), so /resync
+-- may re-apply it. Bundles, science, Full Restore and key items would be
+-- handed out twice.
+function M.is_reapply_safe(item_name)
+    if RESOURCE_BUNDLES[item_name] or item_name == "Raw Science Bundle" or item_name == "Full Restore"
+        or item_name == "Zip Line Rig" then
+        return false
+    end
+    return grant_table[item_name] ~= nil or PROGRESSIVE_LINES[item_name] ~= nil
 end
 
 -- Item row whose icon the in-game popup can show for a received AP item

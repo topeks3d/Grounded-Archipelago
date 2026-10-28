@@ -17,6 +17,7 @@ from .locations import event_locations, locations_by_region
 from .location_renames import ap_name
 from .mutations import MUTATION_PREFIX
 from .landmarks import LANDMARK_PREFIX
+from .shop import SHOP_LOCATION_PREFIX
 from .review_data import DISABLED_LOCATIONS
 
 if TYPE_CHECKING:
@@ -60,6 +61,7 @@ def create_regions(world: "GroundedWorld") -> None:
 
     regions["Grasslands"].connect(regions["Mutations"])
     regions["Grasslands"].connect(regions["Landmarks"])
+    regions["Grasslands"].connect(regions["BURG.L Shop"])
 
     for region in regions.values():
         multiworld.regions.append(region)
@@ -128,5 +130,7 @@ def _skip_location(loc_name: str, options) -> bool:
     if loc_name.startswith(MUTATION_PREFIX) and not options.mutation_checks:
         return True
     if loc_name.startswith(LANDMARK_PREFIX) and not options.landmark_checks:
+        return True
+    if loc_name.startswith(SHOP_LOCATION_PREFIX) and not options.shop_checks:
         return True
     return False

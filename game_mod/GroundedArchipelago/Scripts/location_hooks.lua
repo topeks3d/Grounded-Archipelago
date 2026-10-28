@@ -1245,7 +1245,28 @@ local function read_party_molar_count()
     return total or remaining
 end
 
-local function read_personal_molar_count()
+-- With ProgressiveMolarUpgrades, tiers come from AP items rather than
+-- molars, so "spent + remaining" could count them as molars. Use the
+-- party's own tally of personal molars collected instead (or, failing
+-- that, only the unspent ones -- an undercount never sends a check early).
+local function read_collected_personal_molars()
+    local gs_ok, game_state = pcall(objects.find_first, "SurvivalGameState")
+    if not gs_ok or not game_state then
+        return nil
+    end
+    local ok, total = pcall(function()
+        return unwrap_param(game_state.PartyComponent):GetTotalPersonalUpgradePoints()
+    end)
+    return (ok and type(total) == "number") and total or nil
+end
+
+local function read_personal_molar_count(ipc)
+    if ipc and ipc.progressive_molar_upgrades then
+        local collected = read_collected_personal_molars()
+        if collected then
+            return collected
+        end
+    end
     local player_state_ok, player_state = pcall(objects.find_first, "SurvivalPlayerState")
     if not player_state_ok or not player_state then
         return nil
@@ -1262,6 +1283,9 @@ local function read_personal_molar_count()
         return upgrade_component:GetRemainingUpgradePoints()
     end)
     if spent_ok and remaining_ok and type(spent) == "number" and type(remaining) == "number" then
+        if ipc and ipc.progressive_molar_upgrades then
+            return remaining
+        end
         return spent + remaining
     end
     return nil
@@ -1271,7 +1295,7 @@ local function register_molar_polling(ipc, interval_ms)
     local last_logged_personal, last_logged_party = nil, nil
 
     ap_loop.start_loop(interval_ms, function()
-        local personal = read_personal_molar_count()
+        local personal = read_personal_molar_count(ipc)
         if not personal then
             return -- no player yet (main menu / loading)
         end

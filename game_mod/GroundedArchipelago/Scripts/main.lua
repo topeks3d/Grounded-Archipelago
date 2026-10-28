@@ -25,6 +25,13 @@ local landmarks = require("landmarks")
 local world_gate = require("world_gate")
 local notifications = require("notifications")
 local deathlink = require("deathlink")
+local player_upgrades = require("player_upgrades")
+local safety_net = require("safety_net")
+local gear_perks = require("gear_perks")
+local compass = require("compass")
+local data_dump = require("data_dump")
+local region_locks = require("region_locks")
+local shop = require("shop")
 local mutations = require("mutations")
 local ending_gate = require("ending_gate")
 local reminders = require("reminders")
@@ -75,17 +82,43 @@ local was_in_world = false
 -- before any world (left as it is until one loads).
 local ap_active = nil
 
-local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
+-- Stutter hunting: any step (or a whole tick) taking SLOW_MS or more is
+-- logged, at most every SLOW_LOG_SECONDS per step. os.clock is wall time
+-- on Windows builds.
+local SLOW_MS = 20
+local SLOW_LOG_SECONDS = 30
+local slow_logged = {}
+
+local function note_time(name, started)
+    local ms = (os.clock() - started) * 1000
+    if ms >= SLOW_MS then
+        local now = os.time()
+        if not slow_logged[name] or os.difftime(now, slow_logged[name]) >= SLOW_LOG_SECONDS then
+            slow_logged[name] = now
+            log(string.format("SLOW: %s took %.0f ms", name, ms))
+        end
+    end
+end
+
+-- pcall(fn, ...), timed under `name`.
+local function timed(name, fn, ...)
+    local started = os.clock()
+    local results = table.pack(pcall(fn, ...))
+    note_time(name, started)
+    return table.unpack(results, 1, results.n)
+end
+
+local function tick()
     local status = ipc:poll()
     -- Test mode: config.test_mode.overrides replace the room's options.
-    local override_ok, override_err = pcall(test_mode.apply_overrides, status, config)
+    local override_ok, override_err = timed("test_mode.apply_overrides", test_mode.apply_overrides, status, config)
     if not override_ok then
         log("test_mode.apply_overrides failed, continuing anyway: " .. tostring(override_err))
     end
 
     -- Only inside the Archipelago world: on the main menu grants "succeed"
     -- against nothing.
-    local gate_ok, in_world, world_name, ap_world = pcall(world_gate.check, config)
+    local gate_ok, in_world, world_name, ap_world = timed("world_gate.check", world_gate.check, config)
     if not gate_ok then
         log("world_gate.check failed, treating as not in world: " .. tostring(in_world))
         in_world, world_name, ap_world = false, nil, false
@@ -102,9 +135,10 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
     ipc.goal = status.goal or 0
     ipc.gold_card_goal_amount = status.gold_card_goal_amount or 65
     ipc.excluded_bosses = status.excluded_bosses or {}
+    ipc.progressive_molar_upgrades = status.progressive_molar_upgrades == true
 
     -- Which save is loaded, refreshed every tick for the client's save binding.
-    local identity_ok, identity_err = pcall(location_hooks.refresh_world_identity, ipc)
+    local identity_ok, identity_err = timed("location_hooks.refresh_world_identity", location_hooks.refresh_world_identity, ipc)
     if not identity_ok then
         log("location_hooks.refresh_world_identity failed, continuing anyway: " .. tostring(identity_err))
     end
@@ -115,10 +149,19 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
         log("location_hooks.dump_static_data_once failed, continuing anyway: " .. tostring(dump_err))
     end
 
+    -- Zone / tech tree dumps and zone-change log lines (data_dump.lua).
+    timed("data_dump.tick", data_dump.tick, in_world)
+
     ipc:_flush_from_game()
 
+    -- ShopChecks: purchases become checks (shop.lua).
+    local shop_ok, shop_err = timed("shop.tick", shop.tick, ipc, status, in_world)
+    if not shop_ok then
+        log("shop.tick failed, continuing anyway: " .. tostring(shop_err))
+    end
+
     -- Research/brainpower control and up-front category unlocks.
-    local research_ok, research_err = pcall(research_control.tick, config, in_world, ap_active)
+    local research_ok, research_err = timed("research_control.tick", research_control.tick, config, in_world, ap_active)
     if not research_ok then
         log("research_control.tick failed, continuing anyway: " .. tostring(research_err))
     end
@@ -134,12 +177,19 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
             log("location_hooks.apply_gold_card_drop_chance failed, continuing anyway: " .. tostring(gold_err))
         end
 
-        -- RecipeShuffle: rewrites Tier 2/3 gear ingredients in the recipe
-        -- table as soon as the world starts loading; {} = vanilla.
-        local shuffle_ok, shuffle_err = pcall(recipe_shuffle.tick, ipc, ap_active and status.recipe_shuffle or {})
+        -- RecipeShuffle / RecipeCostMultiplier: rewrite ingredients in the
+        -- recipe table as soon as the world starts loading; {} / 100 = vanilla.
+        local shuffle_ok, shuffle_err = timed("recipe_shuffle.tick", recipe_shuffle.tick, ipc, ap_active and status.recipe_shuffle or {},
+            ap_active and status.recipe_cost_multiplier or 100)
         if not shuffle_ok then
             log("recipe_shuffle.tick failed, continuing anyway: " .. tostring(shuffle_err))
         end
+    end
+
+    -- ProgressiveMolarUpgrades (player_upgrades.lua).
+    local upgrades_ok, upgrades_err = timed("player_upgrades.tick", player_upgrades.tick, status, ipc_dir, in_world, ap_active)
+    if not upgrades_ok then
+        log("player_upgrades.tick failed, continuing anyway: " .. tostring(upgrades_err))
     end
 
     -- CreatureDropShuffle: applied per kill by the creature-death hook
@@ -148,12 +198,12 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
 
     -- Landmark discovery (see landmarks.lua). Runs in any world:
     -- report_location itself decides whether anything is sent.
-    local landmark_ok, landmark_err = pcall(landmarks.tick, ipc)
+    local landmark_ok, landmark_err = timed("landmarks.tick", landmarks.tick, ipc)
     if not landmark_ok then
         log("landmarks.tick failed, continuing anyway: " .. tostring(landmark_err))
     end
 
-    pcall(notifications.tick)
+    timed("notifications.tick", notifications.tick)
 
     -- "This world isn't the Archipelago one" / "not connected" reminders.
     local reminder_ok, reminder_err = pcall(function()
@@ -164,21 +214,45 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
         log("reminders.tick failed, continuing anyway: " .. tostring(reminder_err))
     end
 
-    local death_ok, death_err = pcall(deathlink.tick, ipc, status, in_world)
+    local death_ok, death_err = timed("deathlink.tick", deathlink.tick, ipc, status, in_world)
     if not death_ok then
         log("deathlink.tick failed, continuing anyway: " .. tostring(death_err))
+    end
+
+    -- /resync (safety_net.lua).
+    local safety_ok, safety_err = timed("safety_net.tick", safety_net.tick, status, in_world)
+    if not safety_ok then
+        log("safety_net.tick failed, continuing anyway: " .. tostring(safety_err))
     end
 
     if not in_world then
         return -- received items wait until the player is in the Archipelago world
     end
 
-    local ending_ok, ending_err = pcall(ending_gate.tick, ipc)
+    local ending_ok, ending_err = timed("ending_gate.tick", ending_gate.tick, ipc)
     if not ending_ok then
         log("ending_gate.tick failed, continuing anyway: " .. tostring(ending_err))
     end
 
-    local mutation_ok, mutation_err = pcall(mutations.tick_mutations, ipc)
+    -- RegionLocks: keep the player out of regions without a pass.
+    local regions_ok, regions_err = timed("region_locks.tick", region_locks.tick, status, in_world)
+    if not regions_ok then
+        log("region_locks.tick failed, continuing anyway: " .. tostring(regions_err))
+    end
+
+    -- The client's compass, while it's on (compass.lua).
+    local compass_ok, compass_err = timed("compass.tick", compass.tick, status, ipc_dir, in_world)
+    if not compass_ok then
+        log("compass.tick failed, continuing anyway: " .. tostring(compass_err))
+    end
+
+    -- GearPerks: NG+-style perks on the player's gear (gear_perks.lua).
+    local perks_ok, perks_err = timed("gear_perks.tick", gear_perks.tick, status.gear_perks, ipc.room_key, in_world)
+    if not perks_ok then
+        log("gear_perks.tick failed, continuing anyway: " .. tostring(perks_err))
+    end
+
+    local mutation_ok, mutation_err = timed("mutations.tick_mutations", mutations.tick_mutations, ipc)
     if not mutation_ok then
         log("mutations.tick_mutations failed, continuing anyway: " .. tostring(mutation_err))
     end
@@ -218,6 +292,15 @@ local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
         end
         notifications.show_pending(ipc, status.notifications)
     end)
+end
+
+local sync_loop_ok = ap_loop.start_loop(config.poll_interval_ms, function()
+    local started = os.clock()
+    local ok, err = pcall(tick)
+    note_time("whole tick", started)
+    if not ok then
+        log("tick failed: " .. tostring(err))
+    end
 end)
 
 if not sync_loop_ok then

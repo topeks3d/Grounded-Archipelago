@@ -93,6 +93,18 @@ class RecipeShuffle(Toggle):
     display_name = "Recipe Shuffle"
 
 
+class RecipeCostMultiplier(Range):
+    """Multiplies how many of each ingredient every gear, tool, armor,
+    food and utility recipe costs, as a percentage: 50 halves the costs,
+    300 triples them. Counts round to the nearest whole number and never
+    drop below 1. Applies on top of Recipe Shuffle. The in-game crafting
+    menu and the client's Tracker tab show the adjusted costs."""
+    display_name = "Recipe Cost Multiplier (%)"
+    range_start = 50
+    range_end = 300
+    default = 100
+
+
 class CreatureDropShuffle(Toggle):
     """Shuffle what creatures drop when killed: every creature part (and
     raw meat) is swapped for another one, consistently -- e.g. everything
@@ -106,6 +118,25 @@ class CreatureDropShuffle(Toggle):
     display_name = "Creature Drop Shuffle"
 
 
+class GearPerks(Choice):
+    """Gear rolls random perks the way New Game+ infused gear does, using
+    the game's own perk pools for each gear tier.
+
+    The perks belong to the seed: every copy of one weapon or armor piece
+    rolls the same perks (a different seed, different perks). Hover over the item
+    in game to see the perks; gear that's already equipped when it gets
+    them may need re-equipping.
+
+    off: vanilla gear.
+    weapons: weapons and tools get perks.
+    weapons_and_armor: armor pieces too."""
+    display_name = "Gear Perks"
+    option_off = 0
+    option_weapons = 1
+    option_weapons_and_armor = 2
+    default = 0
+
+
 class ProgressiveGear(Toggle):
     """Replace the individual recipes of the main gear lines with
     progressive items: Progressive Axe, Hammer, Shovel, Spear and Bow, and
@@ -114,6 +145,48 @@ class ProgressiveGear(Toggle):
     Black Ox -> Mantis). Each copy unlocks the next recipe in its line.
     Other weapons stay individual items."""
     display_name = "Progressive Gear"
+
+
+class StarterKit(Toggle):
+    """Start with the Pebblet Axe, Pebblet Hammer, Pebblet Spear, Canteen
+    and Bandage recipes already unlocked (with Progressive Gear: the first
+    Progressive Axe, Hammer and Spear). They're taken out of the item pool,
+    so the early game starts moving right away."""
+    display_name = "Tier 1 Starter Kit"
+
+
+class ProgressiveMolarUpgrades(Toggle):
+    """BURG.L's Milk Molar upgrades become items: Progressive Max Health
+    (6), Max Stamina (5), Hunger and Thirst (5), Healing (5) and Mutation
+    Slot (3). Each copy grants the next tier of that upgrade.
+
+    Molars can no longer be spent at BURG.L (that would stack on top of
+    the items); molar checks still count the molars you find.
+    Logic expects 1 Max Health upgrade before Tier 2 fights and 3 before
+    Tier 3 fights."""
+    display_name = "Progressive Molar Upgrades"
+
+
+class RegionLocks(Toggle):
+    """Every region except the Grasslands is locked until you find its
+    Region Pass (Upper Grasslands, Haze, Shed Surroundings, Hedge, Pond,
+    Sandbox, Woodpile, Moldorc Highlands, BBQ, Undershed). Step into a
+    locked region and the game warns you, then sends you back after a few
+    seconds.
+
+    Logic follows the passes: checks filed under a region, bosses in it,
+    and gear whose ingredients come from it all wait for its pass (and for
+    the regions you cross to get there)."""
+    display_name = "Region Locks"
+
+
+class ShopChecks(Toggle):
+    """Every node in BURG.L's science shop is a check: buying it sends the
+    check (it still gives its usual reward, unless that's a recipe the
+    multiworld hands out). Pages still open when you find their BURG.L chip,
+    so a page's checks are in logic once its chip's area is; pricier nodes
+    come later, since they take more science."""
+    display_name = "BURG.L Shop Checks"
 
 
 class MutationChecks(Toggle):
@@ -136,9 +209,15 @@ class GroundedOptions(PerGameCommonOptions):
     gold_card_drop_chance: GoldCardDropChance
     gold_card_goal_amount: GoldCardGoalAmount
     recipe_shuffle: RecipeShuffle
+    recipe_cost_multiplier: RecipeCostMultiplier
     creature_drop_shuffle: CreatureDropShuffle
     progressive_gear: ProgressiveGear
+    gear_perks: GearPerks
+    starter_kit: StarterKit
+    progressive_molar_upgrades: ProgressiveMolarUpgrades
+    region_locks: RegionLocks
     mutation_checks: MutationChecks
     landmark_checks: LandmarkChecks
+    shop_checks: ShopChecks
     death_link: DeathLink
     start_inventory_from_pool: StartInventoryPool

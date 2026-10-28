@@ -7,6 +7,8 @@
 local M = {}
 
 M.MUTATION_PREFIX = "Mutations: "
+-- archipelago.json's world_version: the client warns when the mod's differs.
+M.VERSION = "0.2.0"
 M.MUTATION_MILESTONES = {1, 3, 5, 8, 12, 16, 20, 25}
 
 -- location_renames.py: mod-reported name -> name shown in Archipelago
@@ -268,6 +270,94 @@ M.CONSUMABLES = {
     ["Wasperole"] = {item_row = "MealTier3Wasperole", recipes = {"Wasperole"}},
     ["Empanadust"] = {item_row = "MealTier3Empanadust", recipes = {"Empanadust"}},
 }
+
+-- player_upgrades.py: AP item -> PlayerUpgradesTable row
+M.MOLAR_UPGRADES = {
+    ["Progressive Max Health"] = "Health",
+    ["Progressive Max Stamina"] = "Stamina",
+    ["Progressive Hunger and Thirst"] = "Thirst",
+    ["Progressive Healing"] = "Healing",
+    ["Progressive Mutation Slot"] = "Perks",
+}
+
+-- shop.py / shop_data.py: {tree row, node row, location name, science cost}
+M.SHOP_NODES = {
+    {"OakLabTechTree", "MultiStoryBuildings", "BURG.L Shop: Oak Lab: Multi Story Buildings", 1000},
+    {"OakLabTechTree", "FoundationPebblet", "BURG.L Shop: Oak Lab: Foundation Pebblet", 2500},
+    {"OakLabTechTree", "FortifiedWalls", "BURG.L Shop: Oak Lab: Fortified Walls", 2500},
+    {"OakLabTechTree", "SmithingStation", "BURG.L Shop: Oak Lab: Smithing Station", 100},
+    {"OakLabTechTree", "TorchUpgrade", "BURG.L Shop: Oak Lab: Torch Upgrade", 1500},
+    {"OakLabTechTree", "PerkHealth", "BURG.L Shop: Oak Lab: Perk Health", 3000},
+    {"OakLabTechTree", "CookbookOak", "BURG.L Shop: Oak Lab: Cookbook Oak", 1000},
+    {"OakLabTechTree", "SignsTeenspirit", "BURG.L Shop: Oak Lab: Signs Teenspirit", 4000},
+    {"OakLabTechTree", "LabRadar", "BURG.L Shop: Oak Lab: Lab Radar", 5000},
+    {"AntHillTechTree", "BandageEfficient", "BURG.L Shop: Ant Hill: Bandage Efficient", 1500},
+    {"AntHillTechTree", "CanteenUpgrade", "BURG.L Shop: Ant Hill: Canteen Upgrade", 1500},
+    {"AntHillTechTree", "PerkStamina", "BURG.L Shop: Ant Hill: Perk Stamina", 3000},
+    {"AntHillTechTree", "SignsCreature", "BURG.L Shop: Ant Hill: Signs Creature", 4000},
+    {"AntHillTechTree", "SCABRadar", "BURG.L Shop: Ant Hill: SCAB Radar", 5000},
+    {"HedgeLabTechTree", "ZiplineRecipe", "BURG.L Shop: Hedge Lab: Zipline Recipe", 2500},
+    {"HedgeLabTechTree", "LadderRecipe", "BURG.L Shop: Hedge Lab: Ladder Recipe", 2500},
+    {"HedgeLabTechTree", "CookbookHedge", "BURG.L Shop: Hedge Lab: Cookbook Hedge", 3500},
+    {"HedgeLabTechTree", "PerkFallDamage", "BURG.L Shop: Hedge Lab: Perk Fall Damage", 3000},
+    {"HedgeLabTechTree", "SignsCrow", "BURG.L Shop: Hedge Lab: Signs Crow", 4000},
+    {"WeedLabTechTree", "ProductionBuildings", "BURG.L Shop: Weed Lab: Production Buildings", 2500},
+    {"WeedLabTechTree", "CrowRoofs", "BURG.L Shop: Weed Lab: Crow Roofs", 2500},
+    {"WeedLabTechTree", "CookBookHaze", "BURG.L Shop: Weed Lab: Cook Book Haze", 3500},
+    {"WeedLabTechTree", "SignsDaydream", "BURG.L Shop: Weed Lab: Signs Daydream", 4000},
+    {"WeedLabTechTree", "TurretPebblet", "BURG.L Shop: Weed Lab: Turret Pebblet", 4000},
+    {"WeedLabTechTree", "QueenBefriendRed", "BURG.L Shop: Weed Lab: Queen Befriend Red", 2500},
+    {"MintTechTree", "UpgradeCandy", "BURG.L Shop: Mint: Upgrade Candy", 2500},
+    {"MintTechTree", "SignDaydream2", "BURG.L Shop: Mint: Sign Daydream2", 4000},
+    {"MintTechTree", "QueenBefriendBlack", "BURG.L Shop: Mint: Queen Befriend Black", 2500},
+    {"PondTechTree", "FloatingFoundations", "BURG.L Shop: Pond: Floating Foundations", 2500},
+    {"PondTechTree", "PerkTeamDamage", "BURG.L Shop: Pond: Perk Team Damage", 3000},
+    {"PondTechTree", "CurvedBases", "BURG.L Shop: Pond: Curved Bases", 2500},
+    {"PondTechTree", "CookbookPond", "BURG.L Shop: Pond: Cookbook Pond", 3500},
+    {"PondTechTree", "SignsPond", "BURG.L Shop: Pond: Signs Pond", 4000},
+    {"PondOutpostTechTree", "StickyBomb", "BURG.L Shop: Pond Outpost: Sticky Bomb", 2500},
+    {"PondOutpostTechTree", "FlippersUpgrade", "BURG.L Shop: Pond Outpost: Flippers Upgrade", 1500},
+    {"PondOutpostTechTree", "DivingLanternUpgrade", "BURG.L Shop: Pond Outpost: Diving Lantern Upgrade", 1500},
+    {"AntHillBlackTechTree", "RecipeSetLures", "BURG.L Shop: Ant Hill Black: Recipe Set Lures", 2500},
+    {"AntHillBlackTechTree", "WeaponUpgradeQuartzite", "BURG.L Shop: Ant Hill Black: Weapon Upgrade Quartzite", 2500},
+    {"AntHillBlackTechTree", "UpgradeMaterialsTier1", "BURG.L Shop: Ant Hill Black: Upgrade Materials Tier1", 1500},
+    {"AntHillBlackTechTree", "CookbookSandbox", "BURG.L Shop: Ant Hill Black: Cookbook Sandbox", 3500},
+    {"AntHillBlackTechTree", "SignsWesternYard", "BURG.L Shop: Ant Hill Black: Signs Western Yard", 4000},
+    {"AntHillBlackTechTree", "Wafter", "BURG.L Shop: Ant Hill Black: Wafter", 2500},
+    {"AntHillBlackTechTree", "Glue", "BURG.L Shop: Ant Hill Black: Glue", 500},
+    {"PicnicTechTree", "SignsPicnicTable", "BURG.L Shop: Picnic: Signs Picnic Table", 4000},
+    {"PicnicTechTree", "CollectibleRadar", "BURG.L Shop: Picnic: Collectible Radar", 5000},
+    {"PicnicTechTree", "Tier3WeaponMint", "BURG.L Shop: Picnic: Tier3 Weapon Mint", 2500},
+    {"WoodPileTechTree", "HatWizard", "BURG.L Shop: Wood Pile: Hat Wizard", 2500},
+    {"WoodPileTechTree", "CandyStaves", "BURG.L Shop: Wood Pile: Candy Staves", 2500},
+    {"WoodPileTechTree", "CookbookTermite", "BURG.L Shop: Wood Pile: Cookbook Termite", 3500},
+    {"WoodPileTechTree", "SignsCreature2", "BURG.L Shop: Wood Pile: Signs Creature2", 4000},
+    {"StumpTechTree", "UpgradeJewelAugments", "BURG.L Shop: Stump: Upgrade Jewel Augments", 2500},
+    {"StumpTechTree", "UpgradeJewelRaw", "BURG.L Shop: Stump: Upgrade Jewel Raw", 2500},
+    {"StumpTechTree", "UpgradeMaterialsTier2", "BURG.L Shop: Stump: Upgrade Materials Tier2", 1500},
+    {"StumpTechTree", "CharcoalBuilding", "BURG.L Shop: Stump: Charcoal Building", 2000},
+    {"StumpTechTree", "SignsYoked", "BURG.L Shop: Stump: Signs Yoked", 4000},
+    {"StumpTechTree", "QueenBefriendFire", "BURG.L Shop: Stump: Queen Befriend Fire", 2500},
+    {"StorageBoxTechTree", "PerkLootLuck", "BURG.L Shop: Storage Box: Perk Loot Luck", 3000},
+    {"StorageBoxTechTree", "CookbookBrawnyBin", "BURG.L Shop: Storage Box: Cookbook Brawny Bin", 3500},
+    {"StorageBoxTechTree", "SignsCreature3", "BURG.L Shop: Storage Box: Signs Creature3", 4000},
+    {"StorageBoxTechTree", "RugsCreatures", "BURG.L Shop: Storage Box: Rugs Creatures", 4000},
+}
+
+-- region_locks.py: AP item -> region it unlocks
+M.REGION_PASSES = {
+    ["Region Pass: Upper Grasslands"] = "Upper Grasslands",
+    ["Region Pass: Haze"] = "Haze",
+    ["Region Pass: Shed Surroundings"] = "Shed Surroundings",
+    ["Region Pass: Hedge"] = "Hedge",
+    ["Region Pass: Pond"] = "Pond",
+    ["Region Pass: Sandbox"] = "Sandbox",
+    ["Region Pass: Woodpile"] = "Woodpile",
+    ["Region Pass: Moldorc Highlands"] = "Moldorc Highlands",
+    ["Region Pass: BBQ"] = "BBQ",
+    ["Region Pass: Undershed"] = "Undershed",
+}
+M.START_REGION = "Grasslands"
 
 -- drop_shuffle.py's DROP_GROUPS (item rows; swaps stay within a group)
 M.DROP_GROUPS = {

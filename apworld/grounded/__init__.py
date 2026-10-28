@@ -25,6 +25,12 @@ from .craftsanity import craftsanity_location_names
 from .gear import GEAR, PROGRESSIVE_GEAR, PROGRESSIVE_LINES
 from .goldcards import GOLD_CARD_PROGRESS_ITEM, gold_card_location_names
 from .options import GroundedOptions
+from .player_upgrades import MOLAR_UPGRADES
+from .region_locks import PASS_ITEMS
+
+# StarterKit: Tier 1 tools/weapon and basic survival recipes to start with.
+STARTER_KIT_GEAR = ("Pebblet Axe", "Pebblet Hammer", "Pebblet Spear")
+STARTER_KIT_CONSUMABLES = ("Canteen", "Bandage")
 from . import drop_shuffle, recipe_shuffle
 
 
@@ -116,18 +122,32 @@ class GroundedWorld(World):
         # Tier 1 recipes go early: nearly every check needs a Tier 1 weapon or
         # tool, and research no longer hands them out. With ProgressiveGear,
         # that's one copy per Tier 1 piece in each line.
+        # (StarterKit items are handed out at the start instead.)
+        kit = self.starter_kit_items()
         early = self.multiworld.early_items[self.player]
         for gear in GEAR:
             if gear.tier != 1 or gear.side:
                 continue
             if self.options.progressive_gear and gear.name in PROGRESSIVE_GEAR:
                 prog = PROGRESSIVE_GEAR[gear.name]
-                early[prog] = early.get(prog, 0) + 1
-            else:
+                early[prog] = early.get(prog, 0) + 1 - kit.count(prog)
+                if early[prog] <= 0:
+                    del early[prog]
+            elif gear.name not in kit:
                 early[gear.name] = 1
         # Bandages too: healing from the start, alongside the Pebblet tools.
         for name in EARLY_CONSUMABLES:
-            early[name] = 1
+            if name not in kit:
+                early[name] = 1
+
+    def starter_kit_items(self) -> List[str]:
+        """StarterKit: the items precollected instead of placed in the pool."""
+        if not self.options.starter_kit:
+            return []
+        kit = []
+        for gear in STARTER_KIT_GEAR:
+            kit.append(PROGRESSIVE_GEAR[gear] if self.options.progressive_gear and gear in PROGRESSIVE_GEAR else gear)
+        return kit + list(STARTER_KIT_CONSUMABLES)
 
     def _apply_slot_data(self, slot_data: Dict[str, Any]) -> None:
         options = self.options
@@ -136,10 +156,16 @@ class GroundedWorld(World):
         options.include_boss_checks.value = int(slot_data.get("include_boss_checks", True))
         options.gold_card_goal_amount.value = slot_data.get("gold_card_goal_amount", options.gold_card_goal_amount.value)
         options.recipe_shuffle.value = int(bool(slot_data.get("recipe_shuffle")))
+        options.recipe_cost_multiplier.value = slot_data.get("recipe_cost_multiplier", 100)
         options.creature_drop_shuffle.value = int(bool(slot_data.get("creature_drop_shuffle")))
         options.progressive_gear.value = int(slot_data.get("progressive_gear", False))
+        options.starter_kit.value = int(slot_data.get("starter_kit", False))
+        options.gear_perks.value = slot_data.get("gear_perks", 0)
+        options.progressive_molar_upgrades.value = int(slot_data.get("progressive_molar_upgrades", False))
+        options.region_locks.value = int(slot_data.get("region_locks", False))
         options.mutation_checks.value = int(slot_data.get("mutation_checks", False))
         options.landmark_checks.value = int(slot_data.get("landmark_checks", False))
+        options.shop_checks.value = int(slot_data.get("shop_checks", False))
 
     @staticmethod
     def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
@@ -161,6 +187,17 @@ class GroundedWorld(World):
         if progressive:
             for name, line in PROGRESSIVE_LINES.items():
                 required.extend(self.create_item(name) for _ in line)
+        if self.options.progressive_molar_upgrades:
+            for name, (_row, tiers) in MOLAR_UPGRADES.items():
+                required.extend(self.create_item(name) for _ in range(tiers))
+        if self.options.region_locks:
+            required.extend(self.create_item(name) for name in PASS_ITEMS)
+
+        for name in self.starter_kit_items():
+            for i, item in enumerate(required):
+                if item.name == name:
+                    self.multiworld.push_precollected(required.pop(i))
+                    break
 
         if len(required) > location_count:
             # Fewer locations than fixed items: keep progression, drop the rest.
@@ -277,10 +314,19 @@ class GroundedWorld(World):
             "item_base_id": ITEM_BASE_ID,
             # See recipe_shuffle.py / recipe_shuffle.lua. Empty = vanilla.
             "recipe_shuffle": self.recipe_ingredients,
+            # Percent applied to every AP-managed recipe's ingredient counts
+            # (recipe_shuffle.lua). 100 = vanilla amounts.
+            "recipe_cost_multiplier": self.options.recipe_cost_multiplier.value,
             # See drop_shuffle.py / drop_shuffle.lua. Empty = vanilla drops.
             "creature_drop_shuffle": self.drop_mapping,
             "progressive_gear": bool(self.options.progressive_gear.value),
+            "starter_kit": bool(self.options.starter_kit.value),
+            # 0 off, 1 weapons, 2 weapons and armor (gear_perks.lua).
+            "gear_perks": self.options.gear_perks.value,
+            "progressive_molar_upgrades": bool(self.options.progressive_molar_upgrades.value),
+            "region_locks": bool(self.options.region_locks.value),
             "mutation_checks": bool(self.options.mutation_checks.value),
             "landmark_checks": bool(self.options.landmark_checks.value),
+            "shop_checks": bool(self.options.shop_checks.value),
             "death_link": bool(self.options.death_link.value),
         }

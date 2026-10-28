@@ -14,6 +14,11 @@
 -- Every ingredient handle already points at the all-items table, so only
 -- RowName/ItemCount change -- the DataTable pointer is left alone.
 --
+-- RecipeCostMultiplier (slot_data "recipe_cost_multiplier", a percent)
+-- scales the ingredient counts of every AP-managed recipe (gear, tools,
+-- armor, consumables, utilities -- item_grants.get_managed_recipe_rows),
+-- shuffled or not: round to nearest, never below 1.
+--
 -- Like research_control.lua, edits live in memory for this game process
 -- only and are reapplied every launch. The vanilla values are remembered
 -- the first time a recipe is touched, so switching to a room with a
@@ -23,6 +28,8 @@
 local M = {}
 
 local objects = require("ap_objects")
+
+local item_grants = require("item_grants")
 
 local function log(fmt, ...)
     print(string.format("[GroundedArchipelago] " .. fmt .. "\n", ...))
@@ -67,8 +74,9 @@ local originals = {}
 local applied_signature = nil
 local failed_warned = {}
 
--- Stable string for a mapping, so an unchanged mapping is a cheap no-op.
-local function signature(mapping)
+-- Stable string for a mapping + multiplier, so an unchanged one is a cheap
+-- no-op.
+local function signature(mapping, percent)
     local keys = {}
     for recipe in pairs(mapping) do
         keys[#keys + 1] = recipe
@@ -82,7 +90,18 @@ local function signature(mapping)
         end
         parts[#parts + 1] = recipe .. "=" .. table.concat(entries, ",")
     end
+    if percent ~= 100 then
+        parts[#parts + 1] = "x" .. tostring(percent)
+    end
     return table.concat(parts, ";")
+end
+
+-- count * percent / 100, rounded to nearest, at least 1.
+local function scale(count, percent)
+    if percent == 100 then
+        return count
+    end
+    return math.max(1, math.floor(count * percent / 100 + 0.5))
 end
 
 local function read_requirements(requirements)
@@ -121,10 +140,11 @@ local function write_requirement(requirements, i, row, count)
     return true
 end
 
--- Rewrites one recipe to `entries` ({ {row, count}, ... }), or back to
--- vanilla when entries is nil. Returns the number of ingredient slots, or
--- nil on failure.
-local function apply_recipe(recipe_table, recipe_row, entries)
+-- Rewrites one recipe to `entries` ({ {row, count}, ... }, nil = its
+-- vanilla ingredients) with every count scaled by `percent`; nil entries at
+-- 100% restores vanilla. Returns the number of ingredient slots, or nil on
+-- failure.
+local function apply_recipe(recipe_table, recipe_row, entries, percent)
     local row_ok, recipe = pcall(function() return recipe_table:FindRow(recipe_row) end)
     if not row_ok or not recipe then
         return nil, "no such recipe row"
@@ -135,8 +155,9 @@ local function apply_recipe(recipe_table, recipe_row, entries)
         return nil, "couldn't read Requirements"
     end
 
+    local changed = entries ~= nil or percent ~= 100
     if not originals[recipe_row] then
-        if not entries then
+        if not changed then
             return 0 -- never touched, nothing to restore
         end
         local vanilla = read_requirements(requirements)
@@ -153,27 +174,30 @@ local function apply_recipe(recipe_table, recipe_row, entries)
         if entries and entries[i] then
             row, count = entries[i][1], entries[i][2]
         end
+        count = scale(count, percent)
         local ok, err = write_requirement(requirements, i, row, count)
         if not ok then
             return nil, string.format("slot %d -> %s: %s", i, row, err)
         end
         described[#described + 1] = string.format("%dx %s", count, row)
     end
-    log("RECIPE_SHUFFLE: %s %s %s", recipe_row, entries and "->" or "restored to", table.concat(described, ", "))
+    log("RECIPE_SHUFFLE: %s %s %s", recipe_row, changed and "->" or "restored to", table.concat(described, ", "))
     return #vanilla
 end
 
 -- Called every poll tick with the mapping from to_game.json (may be nil or
--- empty). `ipc` gets ipc.recipe_slots = {recipe_row -> slot count} so the
--- client's Tracker can show exactly what the game uses.
-function M.tick(ipc, mapping)
+-- empty) and the cost multiplier percent (nil = 100). `ipc` gets
+-- ipc.recipe_slots = {recipe_row -> slot count} for the shuffled recipes,
+-- so the client's Tracker can show exactly what the game uses.
+function M.tick(ipc, mapping, percent)
     mapping = mapping or {}
-    local sig = signature(mapping)
+    percent = math.floor(tonumber(percent) or 100)
+    local sig = signature(mapping, percent)
     if sig == applied_signature then
         return
     end
     if sig == "" and next(originals) == nil then
-        applied_signature = sig -- shuffle off and nothing was ever changed
+        applied_signature = sig -- vanilla and nothing was ever changed
         return
     end
 
@@ -182,17 +206,30 @@ function M.tick(ipc, mapping)
         return -- GlobalTableData not loaded yet, retry next tick
     end
 
-    local slots, changed, failed = {}, 0, 0
-    -- Restore anything we changed that the new mapping doesn't cover.
-    for recipe_row in pairs(originals) do
-        if not mapping[recipe_row] then
-            apply_recipe(recipe_table, recipe_row, nil)
+    -- recipe row -> its shuffled entries, or false for "vanilla ingredients"
+    local wanted = {}
+    if percent ~= 100 then
+        for recipe_row in pairs(item_grants.get_managed_recipe_rows()) do
+            wanted[recipe_row] = false
         end
     end
     for recipe_row, entries in pairs(mapping) do
-        local count, err = apply_recipe(recipe_table, recipe_row, entries)
+        wanted[recipe_row] = entries
+    end
+
+    local slots, changed, failed = {}, 0, 0
+    -- Restore anything we changed that's no longer wanted.
+    for recipe_row in pairs(originals) do
+        if wanted[recipe_row] == nil then
+            apply_recipe(recipe_table, recipe_row, nil, 100)
+        end
+    end
+    for recipe_row, entries in pairs(wanted) do
+        local count, err = apply_recipe(recipe_table, recipe_row, entries or nil, percent)
         if count then
-            slots[recipe_row] = count
+            if entries then
+                slots[recipe_row] = count
+            end
             changed = changed + 1
         else
             failed = failed + 1
@@ -212,7 +249,8 @@ function M.tick(ipc, mapping)
     -- once other rows worked, they're data problems (a renamed row), not
     -- timing ones.
     applied_signature = sig
-    log("RECIPE_SHUFFLE: rewrote %d recipe(s)%s", changed, failed > 0 and string.format(", %d failed", failed) or "")
+    log("RECIPE_SHUFFLE: rewrote %d recipe(s) (cost x%d%%)%s", changed, percent,
+        failed > 0 and string.format(", %d failed", failed) or "")
 end
 
 return M

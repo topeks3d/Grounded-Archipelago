@@ -110,6 +110,8 @@ end
 
 local PLAIN_OVERRIDES = {
     "goal", "excluded_bosses", "gold_card_drop_chance", "gold_card_goal_amount", "death_link",
+    "recipe_cost_multiplier", "progressive_molar_upgrades",
+    "gear_perks", "region_locks", "shop_checks",
 }
 local announced = false
 
