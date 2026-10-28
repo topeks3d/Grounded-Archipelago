@@ -82,10 +82,8 @@ Please remember to only play on fresh saves if you are starting a new multiworld
 
 ## Other trackers
 
-**You do not need to use these since the client already has a tracker tab, however you may prefer these so the alternatives have been implemented.**
+**You do not need to use this since the client already has a tracker tab, however you may prefer it so its here.**
 
-- **PopTracker:** put `grounded_poptracker.zip` in PopTracker's `packs`
-  folder, open the pack, click the AP button and connect with your slot name.
 - **Universal Tracker** works with this world directly.
 
 
@@ -115,8 +113,6 @@ Please remember to only play on fresh saves if you are starting a new multiworld
   which come with Archipelago: the client's UI. Icons use the
   [Material Design Icons](https://pictogrammers.com/library/mdi/) font bundled
   with KivyMD.
-- [PopTracker](https://github.com/black-sliver/PopTracker): the pack in
-  `tracker/grounded_poptracker` follows its pack format.
 - [Universal Tracker](https://github.com/FarisTheAncient/Archipelago/releases):
   works with this world directly.
 
@@ -147,8 +143,6 @@ Please remember to only play on fresh saves if you are starting a new multiworld
   dumps).
 
 **Build tools (not shipped)**
-- [Pillow](https://python-pillow.org) builds the map image, icons and
-  PopTracker images.
 - [lupa](https://github.com/scoder/lupa) loads the Lua scripts in testing.
 
 ## AI Disclosure
